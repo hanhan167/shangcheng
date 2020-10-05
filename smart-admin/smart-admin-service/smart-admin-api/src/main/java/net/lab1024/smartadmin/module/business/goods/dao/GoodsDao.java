@@ -3,7 +3,10 @@ package net.lab1024.smartadmin.module.business.goods.dao;
 
 import net.lab1024.smartadmin.common.base.BaseDao;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 /**
@@ -20,4 +23,5 @@ import org.springframework.stereotype.Repository;
 public interface GoodsDao extends BaseDao<GoodsEntity, Integer> {
 
 
+    List<GoodsEntity> selectByTypeId(@Param("id") Integer id);
 }

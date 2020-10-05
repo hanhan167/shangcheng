@@ -6,6 +6,8 @@ import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * [  ]
@@ -21,4 +23,5 @@ import org.springframework.stereotype.Repository;
 public interface StyleDao extends BaseDao<StyleEntity, Integer> {
 
 
+    List<StyleEntity> selectStyleList(StyleEntity styleEntity);
 }

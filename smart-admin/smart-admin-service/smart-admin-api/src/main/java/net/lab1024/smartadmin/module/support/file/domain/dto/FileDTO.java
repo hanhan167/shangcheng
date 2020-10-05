@@ -55,4 +55,7 @@ public class FileDTO {
 
     @ApiModelProperty("文件展示url（可用于下载,注:七牛云下载url要拼接 ?attname=文件名.jpg）")
     private String fileUrl;
+
+    @ApiModelProperty("文件下标")
+    private Integer fileIndex;
 }

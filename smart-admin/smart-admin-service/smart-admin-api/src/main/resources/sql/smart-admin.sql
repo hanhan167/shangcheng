@@ -225,6 +225,7 @@ CREATE TABLE IF NOT EXISTS `t_file` (
   `creater_user` int(10) NOT NULL COMMENT '创建人，即上传人',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '上次更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `file_index` int(10) DEFAULT NULL COMMENT '文件下标',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `module_id_module_type` (`module_id`,`module_type`) USING BTREE,
   KEY `module_type` (`module_type`) USING BTREE

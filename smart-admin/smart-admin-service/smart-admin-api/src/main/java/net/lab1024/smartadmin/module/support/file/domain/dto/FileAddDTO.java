@@ -36,4 +36,8 @@ public class FileAddDTO {
     @ApiModelProperty("文件路径")
     @NotBlank(message = "文件路径不能为空")
     private String filePath;
+
+    @ApiModelProperty("文件下标")
+    @NotBlank(message = "文件下标不能为空")
+    private Integer fileIndex;
 }

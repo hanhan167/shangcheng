@@ -169,5 +169,16 @@
         <include refid="QUERY_WHERE_CLAUSE"/>
     </select>
 
+    <select id="selectByTypeId"
+            resultType="net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity">
+    SELECT
+	    t_goods.*
+    FROM
+	    t_goods_style
+        LEFT JOIN t_goods ON t_goods_style.goods_id = t_goods.id
+        WHERE
+	t_goods_style.style_id = #{id}
+    </select>
+
 
 </mapper>

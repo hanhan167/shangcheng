@@ -24,6 +24,18 @@
         </where>
     </sql>
 
+    <sql id="QUERY_WHERE_CLAUSE_SPEICAL">
+        <where>
+            <if test="null != id"><![CDATA[AND id = #{id}]]></if>
+            <if test="null != brandName and '' != brandName"><![CDATA[AND POSITION(TRIM(#{brandName}) IN brand_name)  ]]></if>
+            <if test="null != createTime and '' != createTime"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="null != createUserId"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+            <if test="null != updateUserId"><![CDATA[AND update_user_id = #{updateUserId}]]></if>
+            <if test="null != updateTime and '' != updateTime"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="null != deleted"><![CDATA[AND deleted = #{deleted}]]></if>
+        </where>
+    </sql>
+
     <!-- 排序与分页 -->
     <sql id="QUERY_ORDER_LIMIT_CONDITION">
         <if test="null != sortFields and '' != sortFields"><![CDATA[ORDER BY ${sortFields}]]></if>
@@ -138,6 +150,17 @@
         <include refid="QUERY_FROM_TABLE"/>
         <include refid="QUERY_WHERE_CLAUSE"/>
     </select>
+
+    <!-- 查询,通过条件 -->
+    <select id="selectBrandList" parameterType="net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity"
+            resultType="net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE_SPEICAL"/>
+        ORDER BY ${create_time}
+        </select>
+
 
 
 </mapper>

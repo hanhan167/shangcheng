@@ -56,5 +56,9 @@ public class FileEntity extends BaseEntity {
      */
     private Long createrUser;
 
+    /**
+     * 文件下标
+     */
+    private Integer fileIndex;
 }
 

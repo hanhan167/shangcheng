@@ -2,6 +2,7 @@ package net.lab1024.smartadmin.module.support.file;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileDTO;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileQueryDTO;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
@@ -69,4 +70,6 @@ public interface FileDao extends BaseMapper<FileEntity> {
     List<FileVO> listFilesByModuleIdsAndModuleType(@Param("moduleIds") List<String> moduleIds, @Param("moduleType") String moduleType);
 
     List<FileVO> queryListByPage(Page page, @Param("queryDTO") FileQueryDTO queryDTO);
+
+    List<FileEntity> selectFile(@Param("modelType") String modelType,@Param("id") Integer id);
 }

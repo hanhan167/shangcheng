@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.module.support.file.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
 import net.lab1024.smartadmin.module.support.file.FileDao;
 import net.lab1024.smartadmin.module.support.file.constant.FileModuleTypeEnum;
 import net.lab1024.smartadmin.module.support.file.constant.FileResponseCodeConst;
@@ -192,7 +193,14 @@ public class FileService {
         FileEntity entity = SmartBeanUtil.copy(addDTO,FileEntity.class);
         entity.setCreaterUser(requestToken.getRequestUserId());
         entity.setCreateTime(new Date());
+        entity.setFileIndex(addDTO.getFileIndex());
         fileDao.insert(entity);
         return ResponseDTO.succ();
+    }
+
+
+    public List<FileEntity> selectFile(String value, Integer val){
+        List<FileEntity> fileEntityList =  fileDao.selectFile(value, val);
+        return fileEntityList;
     }
 }

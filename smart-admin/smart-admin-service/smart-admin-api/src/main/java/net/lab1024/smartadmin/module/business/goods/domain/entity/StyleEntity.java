@@ -6,9 +6,11 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import net.lab1024.smartadmin.common.base.BaseQuery;
 import net.lab1024.smartadmin.common.domain.BaseEntity;
+import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * [  ]
@@ -39,5 +41,7 @@ public class StyleEntity extends BaseQuery {
     Date updateTime;
 
     Integer deleted;
+
+    List<FileEntity> fileEntityList;
 
 }

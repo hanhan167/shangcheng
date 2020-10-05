@@ -17,11 +17,12 @@
         file_type,
         file_path,
         creater_user,
-        file_location_type
+        file_location_type,
+        file_index
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.moduleId},#{item.moduleType},#{item.fileName},#{item.fileSize},#{item.fileType},#{item.filePath},#{item.createrUser},#{item.createrUserType},#{item.fileLocationType})
+            (#{item.moduleId},#{item.moduleType},#{item.fileName},#{item.fileSize},#{item.fileType},#{item.filePath},#{item.createrUser},#{item.createrUserType},#{item.fileLocationType},#{item.fileIndex})
         </foreach>
     </insert>
 
@@ -34,11 +35,12 @@
         file_type,
         file_path,
         creater_user,
-        file_location_type
+        file_location_type,
+        file_index
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.moduleId},#{item.moduleType},#{item.fileName},#{item.fileSize},#{item.fileType},#{item.filePath},#{item.createrUser},#{item.createrUserType},#{item.fileLocationType})
+            (#{item.moduleId},#{item.moduleType},#{item.fileName},#{item.fileSize},#{item.fileType},#{item.filePath},#{item.createrUser},#{item.createrUserType},#{item.fileLocationType},#{item.fileIndex})
         </foreach>
     </insert>
 
@@ -95,6 +97,11 @@
             </if>
         </where>
         order by create_time desc
+    </select>
+
+
+    <select id="selectFile" resultType="net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity">
+        SELECT * FROM t_file WHERE module_type =#{modelType} AND module_id = #{id}
     </select>
 
 </mapper>

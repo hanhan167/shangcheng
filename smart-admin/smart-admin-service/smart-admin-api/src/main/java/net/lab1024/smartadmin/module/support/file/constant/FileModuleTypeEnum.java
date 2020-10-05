@@ -17,7 +17,13 @@ public enum FileModuleTypeEnum implements BaseEnum {
 
     BACK_USER(1, "backUser/config", "backUser"),
 
-    CODE_REVIEW(2, "codeReview", "CodeReview");
+    CODE_REVIEW(2, "codeReview", "CodeReview"),
+
+    STYLE(3, "picture/style", "style"),
+
+    BRAND(4, "picture/brand", "brand"),
+
+    GOODS(5, "picture/goods", "goods");
 
     private Integer value;
 

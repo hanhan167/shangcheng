@@ -14,7 +14,9 @@ public class GoodsResponseCodeConst extends ResponseCodeConst {
     /**
      * ID_NOT_NULL
      */
-    public static final GoodsResponseCodeConst ID_NOT_NULL = new GoodsResponseCodeConst(3001, "id不能为空！");
+    public static final GoodsResponseCodeConst ID_NOT_NULL = new GoodsResponseCodeConst(10001, "id不能为空！");
+
+    public static final GoodsResponseCodeConst IS_NULL = new GoodsResponseCodeConst(10002, "对象不存在！");
 
 
     public GoodsResponseCodeConst(int code, String msg) {
