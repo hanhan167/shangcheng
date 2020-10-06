@@ -10,6 +10,7 @@ import net.lab1024.smartadmin.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
+import net.lab1024.smartadmin.module.business.goods.domain.dto.PageQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.TypeAndIdDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
@@ -46,8 +47,8 @@ public class GoodsController {
 
     @ApiOperation(value = "分页查询全部商品消息", notes = "@author")
     @PostMapping("goods/page/query")
-    public ResponseDTO<PageResultDTO<GoodsVO>> queryByPage(@RequestBody @Valid GoodsQueryDTO queryDTO) {
-        return goodsService.queryByPage(queryDTO);
+    public ResponseDTO<PageResultDTO<GoodsEntity>> queryByPage(@RequestBody @Valid PageQueryDTO pageQueryDTO) {
+        return goodsService.queryByPage(pageQueryDTO);
     }
 
     @ApiOperation(value = "新增商品", notes = "@author")

@@ -29,6 +29,27 @@
         </where>
     </sql>
 
+    <!-- 全部条件(更多功能可以通过queryData扩展实现) -->
+    <sql id="QUERY_WHERE_CLAUSE_SPECIAL">
+        <where>
+            <if test="null != id"><![CDATA[AND id = #{id}]]></if>
+            <if test="null != brandId"><![CDATA[AND brand_id = #{brandId}]]></if>
+            <if test="null != titile and '' != titile"><![CDATA[AND titile = #{titile}]]></if>
+            <if test="null != explain and '' != explain"><![CDATA[AND explain = #{explain}]]></if>
+            <if test="null != price and '' != price"><![CDATA[AND price = #{price}]]></if>
+            <if test="null != color and '' != color"><![CDATA[AND color = #{color}]]></if>
+            <if test="null != norms and '' != norms"><![CDATA[AND norms = #{norms}]]></if>
+            <if test="null != createTime and '' != createTime"><![CDATA[AND create_time = #{createTime}]]></if>
+            <if test="null != createUserId"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+            <if test="null != updateUserId"><![CDATA[AND update_user_id = #{updateUserId}]]></if>
+            <if test="null != updateTime and '' != updateTime"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="null != deleted"><![CDATA[AND deleted = #{deleted}]]></if>
+            <if test="null != keywords and '' != keywords">
+                AND POSITION(TRIM(#{keywords}) IN CONCAT(IFNULL(tg.price,''),IFNULL(tb.brand_name,''),IFNULL(ts.style_name,'')))
+            </if>
+        </where>
+    </sql>
+
     <!-- 排序与分页 -->
     <sql id="QUERY_ORDER_LIMIT_CONDITION">
         <if test="null != sortFields and '' != sortFields"><![CDATA[ORDER BY ${sortFields}]]></if>
@@ -176,8 +197,38 @@
     FROM
 	    t_goods_style
         LEFT JOIN t_goods ON t_goods_style.goods_id = t_goods.id
+    WHERE
+	    t_goods.deleted = 1 AND t_goods_style.style_id = #{id}
+    </select>
+
+
+    <select id="selectGoodsListPage"
+            resultType="net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity">
+        SELECT
+	      tg.*
+        FROM
+	    t_goods AS tg
+        LEFT JOIN t_goods_style AS tgs ON tg.id = tgs.goods_id
+        LEFT JOIN t_style AS ts ON ts.id = tgs.style_id
+        left JOIN t_brand AS tb ON tb.id = tg.brand_id
         WHERE
-	t_goods_style.style_id = #{id}
+	        tg.deleted = 1
+	    <include refid="QUERY_WHERE_CLAUSE_SPECIAL"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDITION"/>
+    </select>
+
+    <select id="selectGoodsListCount"
+            resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM
+        t_goods AS tg
+        LEFT JOIN t_goods_style AS tgs ON tg.id = tgs.goods_id
+        LEFT JOIN t_style AS ts ON ts.id = tgs.style_id
+        left JOIN t_brand AS tb ON tb.id = tg.brand_id
+        WHERE
+        tg.deleted = 1
+        <include refid="QUERY_WHERE_CLAUSE_SPECIAL"/>
     </select>
 
 

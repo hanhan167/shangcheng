@@ -1,8 +1,7 @@
 package net.lab1024.smartadmin.module.business.goods.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import net.lab1024.smartadmin.common.base.BaseQuery;
 import net.lab1024.smartadmin.common.domain.BaseEntity;
@@ -25,6 +24,9 @@ import java.util.List;
 @Data
 @TableName("t_style")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class StyleEntity extends BaseQuery {
 
     Integer id;

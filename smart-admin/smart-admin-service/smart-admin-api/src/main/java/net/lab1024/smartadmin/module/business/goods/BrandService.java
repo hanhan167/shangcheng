@@ -70,6 +70,7 @@ public class BrandService {
     }
 
     public ResponseDTO<List<BrandEntity>> queryBrand(BrandEntity brandEntity, RequestTokenBO requestToken) {
+        brandEntity.setDeleted(JudgeEnum.YES.getValue());
         List<BrandEntity> brandEntityList = brandDao.selectBrandList(brandEntity);
         if(brandEntityList!=null && brandEntityList.size()>0){
             brandEntityList.forEach(val->{

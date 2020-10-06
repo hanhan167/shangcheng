@@ -2,6 +2,7 @@ package net.lab1024.smartadmin.module.business.goods.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import net.lab1024.smartadmin.common.base.BaseQuery;
 import net.lab1024.smartadmin.common.domain.PageParamDTO;
 
 /**
@@ -15,10 +16,7 @@ import net.lab1024.smartadmin.common.domain.PageParamDTO;
  * @since JDK1.8
  */
 @Data
-public class GoodsQueryDTO extends PageParamDTO {
-
-    @ApiModelProperty("模糊查询")
-    private String keyWords;
+public class GoodsQueryDTO extends BaseQuery {
 
     @ApiModelProperty("风格id")
     private String styleId;
@@ -30,6 +28,6 @@ public class GoodsQueryDTO extends PageParamDTO {
     private String price;
 
     @ApiModelProperty("排序规则")
-    private String order;
+    private String sortFields;
 
 }

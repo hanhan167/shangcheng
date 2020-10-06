@@ -5,12 +5,16 @@ import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
 import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
+import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
+import net.lab1024.smartadmin.module.business.goods.domain.dto.PageQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.TypeAndIdDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
+import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleGoodsEntity;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang.ObjectUtils;
@@ -22,6 +26,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -30,8 +35,25 @@ public class GoodsService {
     @Autowired
     private GoodsDao goodsDao;
 
-    public ResponseDTO<PageResultDTO<GoodsVO>> queryByPage(GoodsQueryDTO queryDTO) {
-            return  null;
+    @Autowired
+    private StyleGoodsService styleGoodsService;
+
+    public ResponseDTO<PageResultDTO<GoodsEntity>> queryByPage(PageQueryDTO pageQueryDTO) {
+        pageQueryDTO.putPage();
+        Map<String, Object> queryFields = pageQueryDTO.getQueryFields();
+        boolean sortFields = queryFields.containsKey("sortFields");
+        if(!sortFields){
+            queryFields.put("sortFields","create_time desc");
+        }
+        //记录条数
+        List<GoodsEntity> goodsEntityList =  goodsDao.selectGoodsListPage(pageQueryDTO);
+        Long count = goodsDao.selectGoodsListCount(pageQueryDTO);
+        PageResultDTO<GoodsEntity> pageResultDTO = new PageResultDTO();
+        pageResultDTO.setList(goodsEntityList);
+        pageResultDTO.setTotal(count);
+        pageResultDTO.setPageNum(Long.valueOf(pageQueryDTO.getCurrentPage()));
+        pageResultDTO.setPageSize(Long.valueOf(pageQueryDTO.getPageSize()));
+        return ResponseDTO.succData(pageResultDTO);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -39,6 +61,8 @@ public class GoodsService {
         goodsEntity.setCreateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         goodsEntity.setCreateTime(new Date());
         goodsDao.save(goodsEntity);
+        //保存多对多表
+        styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).build());
         return ResponseDTO.succData(goodsEntity);
     }
 
@@ -50,7 +74,7 @@ public class GoodsService {
         //1:品牌
         if(type==1){
             //查询
-            goodsEntities = goodsDao.selectList(GoodsEntity.builder().brandId(id).build());
+            goodsEntities = goodsDao.selectList(GoodsEntity.builder().brandId(id).deleted(JudgeEnum.YES.getValue()).build());
         }else if(type==2){
             goodsEntities = goodsDao.selectByTypeId(id);
         }
@@ -62,6 +86,16 @@ public class GoodsService {
         goodsEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         goodsEntity.setUpdateTime(new Date());
         goodsDao.updateByKey(goodsEntity);
+        List<StyleGoodsEntity> styleGoodsEntityList = styleGoodsService.selectList(StyleGoodsEntity.builder().styleId(goodsEntity.getStypeId()).goodsId(goodsEntity.getId()).build());
+        if(!CollectionUtils.isEmpty(styleGoodsEntityList)){
+            styleGoodsEntityList.forEach(val->{
+                val.setUpdateTime(new Date());
+                val.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
+                styleGoodsService.updateByKey(val);
+            });
+        }else{
+            styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).build());
+        }
         return ResponseDTO.succData(goodsEntity);
     }
 

@@ -68,6 +68,7 @@ public class StyleService {
     }
 
     public ResponseDTO<List<StyleEntity>> queryStyle(StyleEntity styleEntity, RequestTokenBO requestToken) {
+        styleEntity.setDeleted(JudgeEnum.YES.getValue());
         List<StyleEntity> styleEntityList = styleDao.selectStyleList(styleEntity);
         if(!CollectionUtils.isEmpty(styleEntityList)){
             styleEntityList.forEach(val->{

@@ -58,4 +58,7 @@ public class GoodsEntity extends BaseQuery {
     Date updateTime;
 
     Integer deleted;
+
+    @NotBlank(message = "stypeId不能为空")
+    Integer stypeId;
 }
