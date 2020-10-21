@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.lab1024.smartadmin.module.business.goods.dao.BrandDao">
+<mapper namespace="net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao">
     <!-- 所有查询列 -->
     <sql id="QUERY_COLUMN_LIST">
         id AS id, goods_id AS goodsId, style_id AS styleId, create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_date AS updateTime , deleted AS deleted

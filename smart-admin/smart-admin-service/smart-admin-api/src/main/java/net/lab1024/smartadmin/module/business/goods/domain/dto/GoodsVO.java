@@ -25,9 +25,6 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GoodsVO extends BaseEntity {
 
-    @ApiModelProperty("id")
-    Integer id;
-
     @ApiModelProperty("品牌id")
     Integer brandId;
 
@@ -49,14 +46,7 @@ public class GoodsVO extends BaseEntity {
     @ApiModelProperty("创建人id")
     Integer createUserId;
 
-    @ApiModelProperty("商品创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date createTime;
-
     @ApiModelProperty("修改人id")
     Integer updateUserId;
 
-    @ApiModelProperty("商品修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date updateTime;
 }

@@ -24,23 +24,13 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StyleVO extends BaseEntity {
 
-    @ApiModelProperty("id")
-    Integer id;
-
     @ApiModelProperty("类型名称")
     String styleName;
 
     @ApiModelProperty("创建人id")
     Integer createUserId;
 
-    @ApiModelProperty("分类创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date createTime;
-
     @ApiModelProperty("修改人id")
     Integer updateUserId;
 
-    @ApiModelProperty("分类修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date updateTime;
 }
