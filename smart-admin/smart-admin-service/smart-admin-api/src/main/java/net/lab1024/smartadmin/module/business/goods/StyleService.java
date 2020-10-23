@@ -1,16 +1,12 @@
 package net.lab1024.smartadmin.module.business.goods;
 
-import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
-import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
 import net.lab1024.smartadmin.module.business.goods.dao.StyleDao;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
-import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
-import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.service.FileService;
@@ -71,7 +67,7 @@ public class StyleService {
     }
 
     public ResponseDTO<List<StyleEntity>> queryStyle(StyleEntity styleEntity, RequestTokenBO requestToken) {
-        styleEntity.setDeleted(JudgeEnum.YES.getValue());
+        styleEntity.setDeleted(StatusEnum.NORMAL.getValue());
         List<StyleEntity> styleEntityList = styleDao.selectStyleList(styleEntity);
         if(!CollectionUtils.isEmpty(styleEntityList)){
             styleEntityList.forEach(val->{

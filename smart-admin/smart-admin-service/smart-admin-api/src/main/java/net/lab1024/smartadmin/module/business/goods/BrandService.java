@@ -1,6 +1,5 @@
 package net.lab1024.smartadmin.module.business.goods;
 
-import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
@@ -77,7 +76,7 @@ public class BrandService {
     }
 
     public ResponseDTO<List<BrandEntity>> queryBrand(BrandEntity brandEntity, RequestTokenBO requestToken) {
-        brandEntity.setDeleted(JudgeEnum.YES.getValue());
+        brandEntity.setDeleted(StatusEnum.NORMAL.getValue());
         List<BrandEntity> brandEntityList = brandDao.selectBrandList(brandEntity);
         if(brandEntityList!=null && brandEntityList.size()>0){
             brandEntityList.forEach(val->{

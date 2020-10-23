@@ -7,8 +7,8 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import net.lab1024.smartadmin.common.anno.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.domain.BaseEntity;
+import net.lab1024.smartadmin.constant.StatusEnum;
 
 import java.util.Date;
 
@@ -35,7 +35,7 @@ public class BrandVO extends BaseEntity {
     @ApiModelProperty("品牌修改人")
     Integer updateUserId;
 
-    @ApiModelPropertyEnum(enumDesc = "正常状态",value = JudgeEnum.class)
+    @ApiModelPropertyEnum(enumDesc = "正常状态",value = StatusEnum.class)
     Integer deleted;
 
 }

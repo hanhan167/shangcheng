@@ -76,7 +76,7 @@ public class GoodsService {
         //1:品牌
         if(type==1){
             //查询
-            goodsEntities = goodsDao.selectList(GoodsEntity.builder().brandId(id).deleted(JudgeEnum.YES.getValue()).build());
+            goodsEntities = goodsDao.selectList(GoodsEntity.builder().brandId(id).deleted(StatusEnum.NORMAL.getValue()).build());
         }else if(type==2){
             goodsEntities = goodsDao.selectByTypeId(id);
         }
