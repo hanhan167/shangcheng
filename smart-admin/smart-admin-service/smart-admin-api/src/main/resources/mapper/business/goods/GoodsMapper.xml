@@ -3,7 +3,7 @@
 <mapper namespace="net.lab1024.smartadmin.module.business.goods.dao.GoodsDao">
     <!-- 所有查询列 -->
     <sql id="QUERY_COLUMN_LIST">
-        id AS id, brand_id AS brandId,title as title, explain AS explain, price AS price, color AS color, norms AS norms,create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_date AS updateTime , deleted AS deleted
+        id AS id, brand_id AS brandId,title as title, explain AS explain, price AS price, color AS color, norms AS norms,create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_time AS updateTime , deleted AS deleted
     </sql>
 
     <!-- 查询列来源表 -->
@@ -78,7 +78,7 @@
     <insert id="save" keyProperty="id"
             parameterType="net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity"
             useGeneratedKeys="true">
-        INSERT INTO process_to_be_read_group
+        INSERT INTO t_goods
 		(
 		id,
 		brand_id,
@@ -102,10 +102,10 @@
 		#{price},
 		#{color},
 		#{norms},
-		#{createUserId},
+		#{updateTime},
 		#{createTime},
 		#{updateUserId},
-		#{updateTime},
+		#{createUserId},
 		#{deleted}
 		)
     </insert>
@@ -115,7 +115,7 @@
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO process_to_be_read_group
+        INSERT INTO t_goods
         (
         id,
         brand_id,
@@ -140,10 +140,10 @@
             #{item.price},
             #{item.color},
             #{item.norms},
-            #{item.createUserId},
+            #{item.updateTime},
             #{item.createTime},
             #{item.updateUserId},
-            #{item.updateTime},
+            #{item.createUserId},
             #{item.deleted}
             )
         </foreach>

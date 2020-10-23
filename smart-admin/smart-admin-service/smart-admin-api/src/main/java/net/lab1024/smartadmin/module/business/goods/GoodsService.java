@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.module.business.goods;
 import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
 import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
 import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
@@ -60,9 +61,10 @@ public class GoodsService {
     public ResponseDTO<GoodsEntity> saveGoods(GoodsEntity goodsEntity, RequestTokenBO requestToken) {
         goodsEntity.setCreateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         goodsEntity.setCreateTime(new Date());
+        goodsEntity.setDeleted(StatusEnum.NORMAL.getValue());
         goodsDao.save(goodsEntity);
         //保存多对多表
-        styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).build());
+        styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).deleted(StatusEnum.NORMAL.getValue()).build());
         return ResponseDTO.succData(goodsEntity);
     }
 
@@ -85,8 +87,9 @@ public class GoodsService {
     public ResponseDTO<GoodsEntity> updateGoods(GoodsEntity goodsEntity, RequestTokenBO requestToken) {
         goodsEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         goodsEntity.setUpdateTime(new Date());
+        goodsEntity.setDeleted(StatusEnum.NORMAL.getValue());
         goodsDao.updateByKey(goodsEntity);
-        List<StyleGoodsEntity> styleGoodsEntityList = styleGoodsService.selectList(StyleGoodsEntity.builder().styleId(goodsEntity.getStypeId()).goodsId(goodsEntity.getId()).build());
+        List<StyleGoodsEntity> styleGoodsEntityList = styleGoodsService.selectList(StyleGoodsEntity.builder().styleId(goodsEntity.getStypeId()).goodsId(goodsEntity.getId()).deleted(StatusEnum.NORMAL.getValue()).build());
         if(!CollectionUtils.isEmpty(styleGoodsEntityList)){
             styleGoodsEntityList.forEach(val->{
                 val.setUpdateTime(new Date());
@@ -94,7 +97,7 @@ public class GoodsService {
                 styleGoodsService.updateByKey(val);
             });
         }else{
-            styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).build());
+            styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).deleted(StatusEnum.NORMAL.getValue()).build());
         }
         return ResponseDTO.succData(goodsEntity);
     }
@@ -105,7 +108,7 @@ public class GoodsService {
         if(goodsEntity==null){
             return ResponseDTO.wrap(GoodsResponseCodeConst.NOT_EXISTS);
         }
-        goodsEntity.setDeleted(JudgeEnum.NO.getValue());
+        goodsEntity.setDeleted(StatusEnum.DELETED.getValue());
         goodsEntity.setUpdateTime(new Date());
         goodsEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         goodsDao.updateByKey(goodsEntity);

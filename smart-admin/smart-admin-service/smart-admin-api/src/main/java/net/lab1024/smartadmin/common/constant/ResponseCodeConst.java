@@ -42,6 +42,8 @@ public class ResponseCodeConst {
 
     public static final ResponseCodeConst ERROR_PARAM = new ResponseCodeConst(101, "参数异常！");
 
+    public static final ResponseCodeConst DATA_REPEAT = new ResponseCodeConst(202, "数据重复！");
+
     public static final ResponseCodeConst ERROR_PARAM_ANY = new ResponseCodeConst(102, "%s参数异常！");
 
     public static final ResponseCodeConst SYSTEM_ERROR = new ResponseCodeConst(111, "系统错误");

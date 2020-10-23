@@ -7,6 +7,7 @@ import net.lab1024.smartadmin.common.base.BaseQuery;
 import net.lab1024.smartadmin.common.domain.BaseEntity;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -34,19 +35,19 @@ public class GoodsEntity extends BaseQuery {
     @NotNull(message = "brandId不能为空")
     Integer brandId;
 
-    @NotBlank(message = "titile不能为空")
+    @NotEmpty(message = "titile不能为空")
     String titile;
 
-    @NotBlank(message = "explain不能为空")
+    @NotEmpty(message = "explain不能为空")
     String explain;
 
-    @NotBlank(message = "price不能为空")
+    @NotEmpty(message = "price不能为空")
     String price;
 
-    @NotBlank(message = "color不能为空")
+    @NotEmpty(message = "color不能为空")
     String color;
 
-    @NotBlank(message = "norms不能为空")
+    @NotEmpty(message = "norms不能为空")
     String norms;
 
     Integer createUserId;
@@ -59,6 +60,6 @@ public class GoodsEntity extends BaseQuery {
 
     Integer deleted;
 
-    @NotBlank(message = "stypeId不能为空")
+    @NotEmpty(message = "stypeId不能为空")
     Integer stypeId;
 }

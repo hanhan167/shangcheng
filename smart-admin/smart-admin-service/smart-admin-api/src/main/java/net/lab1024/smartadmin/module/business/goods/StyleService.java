@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.module.business.goods;
 import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
 import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
 import net.lab1024.smartadmin.module.business.goods.dao.StyleDao;
@@ -42,6 +43,7 @@ public class StyleService {
     public ResponseDTO<StyleEntity> saveStyle(StyleEntity styleEntity, RequestTokenBO requestToken) {
         styleEntity.setCreateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         styleEntity.setCreateTime(new Date());
+        styleEntity.setDeleted(StatusEnum.NORMAL.getValue());
         styleDao.save(styleEntity);
         return ResponseDTO.succData(styleEntity);
     }
@@ -50,6 +52,7 @@ public class StyleService {
     public ResponseDTO<StyleEntity> updateStyle(StyleEntity styleEntity, RequestTokenBO requestToken) {
         styleEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         styleEntity.setUpdateTime(new Date());
+        styleEntity.setDeleted(StatusEnum.NORMAL.getValue());
         styleDao.updateByKey(styleEntity);
         return ResponseDTO.succData(styleEntity);
     }
@@ -60,7 +63,7 @@ public class StyleService {
         if(styleEntity==null){
             return ResponseDTO.wrap(IS_NULL);
         }
-        styleEntity.setDeleted(JudgeEnum.NO.getValue());
+        styleEntity.setDeleted(StatusEnum.DELETED.getValue());
         styleEntity.setUpdateTime(new Date());
         styleEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         styleDao.updateByKey(styleEntity);

@@ -2,7 +2,9 @@ package net.lab1024.smartadmin.module.business.goods;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.common.anno.NoNeedLogin;
 import net.lab1024.smartadmin.common.anno.NoValidPrivilege;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
@@ -46,20 +48,23 @@ public class GoodsController {
     private BrandService brandService;
 
     @ApiOperation(value = "分页查询全部商品消息", notes = "@author")
-    @PostMapping("goods/page/query")
+    @RequestMapping("goods/page/query")
+    @NoNeedLogin
     public ResponseDTO<PageResultDTO<GoodsEntity>> queryByPage(@RequestBody @Valid PageQueryDTO pageQueryDTO) {
         return goodsService.queryByPage(pageQueryDTO);
     }
 
     @ApiOperation(value = "新增商品", notes = "@author")
-    @PostMapping("goods/saveGoods")
+    @RequestMapping("goods/saveGoods")
+    @NoNeedLogin
     public ResponseDTO<GoodsEntity> saveGoods(@RequestBody @Valid GoodsEntity goodsEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return goodsService.saveGoods(goodsEntity,requestToken);
     }
 
     @ApiOperation(value = "修改商品", notes = "@author")
-    @PostMapping("goods/updateGoods")
+    @RequestMapping("goods/updateGoods")
+    @NoNeedLogin
     public ResponseDTO<GoodsEntity> updateGoods(@RequestBody @Valid GoodsEntity goodsEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(goodsEntity.getId()==null){
@@ -69,7 +74,8 @@ public class GoodsController {
     }
 
     @ApiOperation(value = "删除商品", notes = "@author")
-    @PostMapping("goods/delGoods/{id}")
+    @RequestMapping("goods/delGoods/{id}")
+    @NoNeedLogin
     public ResponseDTO<GoodsEntity> delGoods(@PathVariable Integer id) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(id==null){
@@ -79,21 +85,22 @@ public class GoodsController {
     }
 
     @ApiOperation(value = "查询品牌", notes = "@author")
-    @PostMapping("brand/queryBrand")
+    @RequestMapping("brand/queryBrand")
+    @NoNeedLogin
     public ResponseDTO<List<BrandEntity>> queryBrand(@RequestBody BrandEntity brandEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return brandService.queryBrand(brandEntity,requestToken);
     }
 
     @ApiOperation(value = "新增品牌", notes = "@author")
-    @PostMapping("brand/saveBrand")
+    @RequestMapping("brand/saveBrand")
     public ResponseDTO<BrandEntity> saveBrand(@RequestBody @Valid BrandEntity brandEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return brandService.saveBrand(brandEntity,requestToken);
     }
 
     @ApiOperation(value = "修改品牌", notes = "@author")
-    @PostMapping("brand/updateBrand")
+    @RequestMapping("brand/updateBrand")
     public ResponseDTO<BrandEntity> updateBrand(@RequestBody @Valid BrandEntity brandEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(brandEntity.getId()==null){
@@ -103,7 +110,7 @@ public class GoodsController {
     }
 
     @ApiOperation(value = "删除品牌", notes = "@author")
-    @PostMapping("brand/delBrand/{id}")
+    @RequestMapping("brand/delBrand/{id}")
     public ResponseDTO<BrandEntity> delBrand(@PathVariable Integer id) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(id==null){
@@ -113,21 +120,21 @@ public class GoodsController {
     }
 
     @ApiOperation(value = "查询分类", notes = "@author")
-    @PostMapping("style/queryStyle")
+    @RequestMapping("style/queryStyle")
     public ResponseDTO<List<StyleEntity>> queryStyle(@RequestBody StyleEntity styleEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return styleService.queryStyle(styleEntity,requestToken);
     }
 
     @ApiOperation(value = "新增分类", notes = "@author")
-    @PostMapping("style/saveStyle")
+    @RequestMapping("style/saveStyle")
     public ResponseDTO<StyleEntity> saveStyle(@RequestBody @Valid StyleEntity styleEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return styleService.saveStyle(styleEntity,requestToken);
     }
 
     @ApiOperation(value = "修改分类", notes = "@author")
-    @PostMapping("style/updateStyle")
+    @RequestMapping("style/updateStyle")
     public ResponseDTO<StyleEntity> updateStyle(@RequestBody @Valid StyleEntity styleEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(styleEntity.getId()==null){
@@ -136,8 +143,8 @@ public class GoodsController {
         return styleService.updateStyle(styleEntity,requestToken);
     }
 
-    @ApiOperation(value = "删除品牌", notes = "@author")
-    @PostMapping("brand/delStyle/{id}")
+    @ApiOperation(value = "删除分类", notes = "@author")
+    @RequestMapping("style/delStyle/{id}")
     public ResponseDTO<StyleEntity> delStyle(@PathVariable Integer id) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(id==null){
@@ -148,7 +155,7 @@ public class GoodsController {
 
 
     @ApiOperation(value = "查询是否有对应的商品", notes = "@author")
-    @PostMapping("goods/findIsNotGoods")
+    @RequestMapping("goods/findIsNotGoods")
     public ResponseDTO<List<GoodsEntity>>  findIsNotGoods(@RequestBody @Valid TypeAndIdDTO typeAndIdDTO) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return goodsService.findIsNotGoods(typeAndIdDTO,requestToken);

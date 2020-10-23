@@ -1520,66 +1520,57 @@ INSERT INTO `t_user_operate_log` (`id`, `user_id`, `user_name`, `module`, `conte
 
 -- 导出  表 商品表
 DROP TABLE IF EXISTS `t_brand`;
-CREATE TABLE IF NOT EXISTS `t_brand` (
+CREATE TABLE `t_brand` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `brand_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌名称',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `brand_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '品牌名称',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_user_id` int(11) DEFAULT NULL COMMENT '更新人id',
-  `create_user_id` int(11) DEFAULT NULL  COMMENT '创建人id',
+  `create_user_id` int(11) DEFAULT NULL COMMENT '创建人id',
+  `deleted` int(255) DEFAULT NULL COMMENT '1：正常状态；0：删除状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 导出  表 风格表
 DROP TABLE IF EXISTS `t_style`;
-CREATE TABLE IF NOT EXISTS `t_style` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `style_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌名称',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_user_id` int(11) DEFAULT NULL COMMENT '更新人id',
-  `create_user_id` int(11) DEFAULT NULL  COMMENT '创建人id',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- 导出  表 风格表
-DROP TABLE IF EXISTS `t_style`;
-CREATE TABLE IF NOT EXISTS `t_style` (
+CREATE TABLE `t_style` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `style_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '品牌名称',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_user_id` int(11) DEFAULT NULL COMMENT '更新人id',
-  `create_user_id` int(11) DEFAULT NULL  COMMENT '创建人id',
+  `create_user_id` int(11) DEFAULT NULL COMMENT '创建人id',
+  `deleted` int(255) DEFAULT NULL COMMENT '1：正常状态；0：删除状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 导出  表 商品表
 DROP TABLE IF EXISTS `t_goods`;
-CREATE TABLE IF NOT EXISTS `t_goods` (
+CREATE TABLE `t_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `brand_id` int(11) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌名称',
+  `brand_id` int(11) DEFAULT NULL COMMENT '品牌名称',
   `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '标题',
   `explain` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '说明',
   `price` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '价格',
   `color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '颜色',
   `norms` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '规格',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_user_id` int(11) DEFAULT NULL COMMENT '更新人id',
-  `create_user_id` int(11) DEFAULT NULL  COMMENT '创建人id',
+  `create_user_id` int(11) DEFAULT NULL COMMENT '创建人id',
+  `deleted` int(255) DEFAULT NULL COMMENT '1：正常状态；0：删除状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 导出  表 中间表（商品和风格）
 DROP TABLE IF EXISTS `t_goods_style`;
-CREATE TABLE IF NOT EXISTS `t_goods_style` (
+CREATE TABLE `t_goods_style` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `brand_id` int(11) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌id',
-  `style_id` int(11) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '风格id',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
+  `style_id` int(11) DEFAULT NULL COMMENT '风格id',
+   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_user_id` int(11) DEFAULT NULL COMMENT '更新人id',
-  `create_user_id` int(11) DEFAULT NULL  COMMENT '创建人id',
+  `create_user_id` int(11) DEFAULT NULL COMMENT '创建人id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
