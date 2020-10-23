@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -51,8 +52,17 @@ public class FileService {
     @Autowired
     private FileDao fileDao;
 
+    private static final ConcurrentHashMap<String, IFileService> fileServiceMap = new ConcurrentHashMap<>();
+
     @Autowired
-    private ConcurrentHashMap<String, IFileService> fileServiceMap;
+    private List<IFileService> alarmHandlers;
+
+    @PostConstruct
+    public void init() {
+        alarmHandlers.forEach(alarmHandler -> {
+            fileServiceMap.put(alarmHandler.getClass().getName(), alarmHandler);
+        });
+    }
 
     /**
      * 获取文件服务实现
