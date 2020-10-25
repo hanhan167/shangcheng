@@ -69,6 +69,7 @@ public class LoginTokenService {
         Claims jwtClaims = Jwts.claims().setSubject(baseToken);
         jwtClaims.put(CLAIM_ID_KEY, id);
         String compactJws = Jwts.builder().setClaims(jwtClaims).setNotBefore(from).setExpiration(expire).signWith(SignatureAlgorithm.HS512, jwtKey).compact();
+        System.out.println("compactJws:"+compactJws);
 
         EmployeeBO employeeBO = employeeService.getById(id);
         RequestTokenBO tokenBO = new RequestTokenBO(employeeBO);

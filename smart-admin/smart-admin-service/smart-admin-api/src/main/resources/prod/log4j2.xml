@@ -5,7 +5,7 @@
 -->
 <Configuration status="INFO" monitorInterval="30">
     <Properties>
-        <Property name="log-path">/home/logs/smart-admin</Property>
+        <Property name="log-path">C:\WebProject\log</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
