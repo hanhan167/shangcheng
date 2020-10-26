@@ -10,6 +10,7 @@ import net.lab1024.smartadmin.util.SmartPageUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,6 +93,7 @@ public class PositionService {
      * @param positionRelAddDTO
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> addPositionRelation(PositionRelationAddDTO positionRelAddDTO) {
         positionDao.insertBatchRelation(positionRelAddDTO);
         return ResponseDTO.succ();

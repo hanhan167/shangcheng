@@ -317,15 +317,7 @@
             <properties>
                 <profiles.active>dev</profiles.active>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>telework</id>
-            <properties>
-                <profiles.active>telework</profiles.active>
-            </properties>
+
         </profile>
         <profile>
             <id>sit</id>
@@ -333,6 +325,13 @@
                 <profiles.active>sit</profiles.active>
             </properties>
         </profile>
+        <profile>
+            <id>telework</id>
+            <properties>
+                <profiles.active>telework</profiles.active>
+            </properties>
+        </profile>
+
         <profile>
             <id>pre</id>
             <properties>
@@ -344,6 +343,9 @@
             <properties>
                 <profiles.active>prod</profiles.active>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
     </profiles>
 </project>

@@ -74,7 +74,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "删除员工信息", notes = "@author yandanyang")
-    @PostMapping("/employee/delete/{employeeId}")
+    @GetMapping("/employee/delete/{employeeId}")
     public ResponseDTO<String> deleteEmployeeById(@PathVariable("employeeId") Long employeeId) {
         return employeeService.deleteEmployeeById(employeeId);
     }
@@ -105,6 +105,10 @@ public class EmployeeController {
         return employeeService.resetPasswd(employeeId);
     }
 
-
+    @ApiOperation(value = "查询员工信息", notes = "@author lizongliang")
+    @GetMapping("/employee/getPersonById/{employeeId}")
+    public ResponseDTO getPersonById(@PathVariable("employeeId") Integer employeeId) {
+        return employeeService.getPersonById(employeeId);
+    }
 
 }

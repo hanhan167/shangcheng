@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.module.system.employee.domain.dto;
 import net.lab1024.smartadmin.util.SmartVerificationUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -30,11 +31,11 @@ public class EmployeeAddDTO {
     private String nickName;
 
     @ApiModelProperty("部门id")
-    @NotNull(message = "部门id不能为空")
+    //@NotNull(message = "部门id不能为空")
     private Long departmentId;
 
     @ApiModelProperty("是否启用")
-    @NotNull(message = "是否被禁用不能为空")
+    //@NotNull(message = "是否被禁用不能为空")
     private Integer isDisabled;
 
     @ApiModelProperty("手机号")
@@ -49,15 +50,15 @@ public class EmployeeAddDTO {
     private String birthday;
 
     @ApiModelProperty("密码")
-    //    @NotNull(message = "密码不能为空")
-    //    @Length(min = 6, message = "密码最少为6位字符")
+    @NotNull(message = "密码不能为空")
+    @Length(min = 6, message = "密码最少为6位字符")
     private String loginPwd;
 
     @ApiModelProperty("邮箱")
     private String email;
 
     @ApiModelProperty("岗位ID 集合")
-    @NotEmpty(message = "岗位ID 集合不能为空")
+    //@NotEmpty(message = "岗位ID 集合不能为空")
     private List<Long> positionIdList;
 
 }

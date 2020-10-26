@@ -37,7 +37,7 @@
         <where>
             <if test="queryDTO.phone != null and queryDTO.phone != ''">
                 <bind name="likephone" value=" '%' + queryDTO.phone +'%' "></bind>
-                AND e.actual_name like #{likephone}
+                AND e.phone like #{likephone}
             </if>
             <if test="queryDTO.actualName != null and queryDTO.actualName != ''">
                 <bind name="likeActualName" value=" '%' + queryDTO.actualName +'%' "></bind>

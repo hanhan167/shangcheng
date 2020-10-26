@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.common.heartbeat.StringUtil;
 import net.lab1024.smartadmin.constant.CommonConst;
 import net.lab1024.smartadmin.module.system.department.DepartmentDao;
 import net.lab1024.smartadmin.module.system.department.domain.entity.DepartmentEntity;
@@ -31,6 +32,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,6 +137,7 @@ public class EmployeeService {
      * @param requestToken
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> addEmployee(EmployeeAddDTO employeeAddDto, RequestTokenBO requestToken) {
         EmployeeEntity entity = SmartBeanUtil.copy(employeeAddDto, EmployeeEntity.class);
         if (StringUtils.isNotEmpty(employeeAddDto.getIdCard())) {
@@ -159,7 +162,10 @@ public class EmployeeService {
         if (null != samePhoneEmployee) {
             return ResponseDTO.wrap(EmployeeResponseCodeConst.PHONE_EXISTS);
         }
-        Long departmentId = entity.getDepartmentId();
+//        Long departmentId = entity.getDepartmentId();
+        //默认将起设置为2
+        Long departmentId = 2L;
+        entity.setDepartmentId(departmentId);
         DepartmentEntity department = departmentDao.selectById(departmentId);
         if (department == null) {
             return ResponseDTO.wrap(EmployeeResponseCodeConst.DEPT_NOT_EXIST);
@@ -179,9 +185,12 @@ public class EmployeeService {
         }
         employeeDao.insert(entity);
 
-        PositionRelationAddDTO positionRelAddDTO = new PositionRelationAddDTO(employeeAddDto.getPositionIdList(), entity.getId());
-        //存储所选岗位信息
-        positionService.addPositionRelation(positionRelAddDTO);
+//        PositionRelationAddDTO positionRelAddDTO = new PositionRelationAddDTO(employeeAddDto.getPositionIdList(), entity.getId());
+//        //存储所选岗位信息
+//        positionService.addPositionRelation(positionRelAddDTO);
+
+        //是否设置默认角色 TODO
+
 
         return ResponseDTO.succ();
     }
@@ -270,12 +279,12 @@ public class EmployeeService {
         if (StringUtils.isEmpty(entity.getBirthday())) {
             entity.setBirthday(null);
         }
-        if (CollectionUtils.isNotEmpty(updateDTO.getPositionIdList())) {
-            //删除旧的关联关系 添加新的关联关系
-            positionService.removePositionRelation(entity.getId());
-            PositionRelationAddDTO positionRelAddDTO = new PositionRelationAddDTO(updateDTO.getPositionIdList(), entity.getId());
-            positionService.addPositionRelation(positionRelAddDTO);
-        }
+//        if (CollectionUtils.isNotEmpty(updateDTO.getPositionIdList())) {
+//            //删除旧的关联关系 添加新的关联关系
+//            positionService.removePositionRelation(entity.getId());
+//            PositionRelationAddDTO positionRelAddDTO = new PositionRelationAddDTO(updateDTO.getPositionIdList(), entity.getId());
+//            positionService.addPositionRelation(positionRelAddDTO);
+//        }
         entity.setIsDisabled(employeeEntity.getIsDisabled());
         entity.setIsLeave(employeeEntity.getIsLeave());
         entity.setCreateUser(employeeEntity.getCreateUser());
@@ -366,4 +375,8 @@ public class EmployeeService {
         return ResponseDTO.succ();
     }
 
+    public ResponseDTO getPersonById(Integer employeeId) {
+        EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
+        return ResponseDTO.succData(employeeEntity);
+    }
 }
