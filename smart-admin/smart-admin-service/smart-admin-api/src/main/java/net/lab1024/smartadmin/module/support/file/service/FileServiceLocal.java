@@ -42,6 +42,9 @@ public class FileServiceLocal implements IFileService {
     @Value("${file-upload-service.path}")
     private String fileParentPath;
 
+    @Value("${file-upload-service.urlParent}")
+    private String urlParent;
+
     private static final Long DEFAULT_SIZE = 10 * 1024 * 1024L;
 
     @Override
@@ -58,13 +61,11 @@ public class FileServiceLocal implements IFileService {
             return ResponseDTO.wrap(FileResponseCodeConst.FILE_SIZE_ERROR, String.format(FileResponseCodeConst.FILE_SIZE_ERROR.getMsg(), maxFileSize));
         }
         String filePath = fileParentPath;
-        String urlParent = this.localUrlPrefix();
         if (urlParent == null) {
             return ResponseDTO.wrap(FileResponseCodeConst.LOCAL_UPDATE_PREFIX_ERROR);
         }
         if (StringUtils.isNotEmpty(path)) {
             filePath = filePath + path + "/";
-            urlParent = urlParent + path + "/";
         }
         File directory = new File(filePath);
         if (!directory.exists()) {
@@ -76,7 +77,8 @@ public class FileServiceLocal implements IFileService {
         File fileTemp;
         String originalFileName;
         originalFileName = multipartFile.getOriginalFilename();
-        newFileName = this.generateFileName(originalFileName);
+//        newFileName = this.generateFileName(originalFileName);
+        newFileName = originalFileName;
         fileTemp = new File(new File(filePath + newFileName).getAbsolutePath());
         try {
             multipartFile.transferTo(fileTemp);

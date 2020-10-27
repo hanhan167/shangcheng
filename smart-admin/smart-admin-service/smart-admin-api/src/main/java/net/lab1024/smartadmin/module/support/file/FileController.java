@@ -37,6 +37,7 @@ public class FileController {
 
     @ApiOperation(value = "文件本地上传", notes = "文件本地上传")
     @PostMapping("/api/file/localUpload/{moduleType}")
+    @NoNeedLogin
     public ResponseDTO<UploadVO> localUpload(MultipartFile file, @PathVariable Integer moduleType) throws Exception {
         return fileService.fileUpload(file, FileServiceTypeEnum.LOCAL, moduleType);
     }

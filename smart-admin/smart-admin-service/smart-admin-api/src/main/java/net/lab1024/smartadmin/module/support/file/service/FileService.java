@@ -7,6 +7,7 @@ import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
 import net.lab1024.smartadmin.module.support.file.FileDao;
 import net.lab1024.smartadmin.module.support.file.constant.FileModuleTypeEnum;
 import net.lab1024.smartadmin.module.support.file.constant.FileResponseCodeConst;
+import net.lab1024.smartadmin.module.support.file.constant.FileServiceNameConst;
 import net.lab1024.smartadmin.module.support.file.constant.FileServiceTypeEnum;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileAddDTO;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileDTO;
@@ -52,17 +53,11 @@ public class FileService {
     @Autowired
     private FileDao fileDao;
 
+    @Autowired
     private static final ConcurrentHashMap<String, IFileService> fileServiceMap = new ConcurrentHashMap<>();
 
-    @Autowired
-    private List<IFileService> alarmHandlers;
-
-    @PostConstruct
-    public void init() {
-        alarmHandlers.forEach(alarmHandler -> {
-            fileServiceMap.put(alarmHandler.getClass().getName(), alarmHandler);
-        });
-    }
+    @Resource(name = "local")
+    private IFileService fileService;
 
     /**
      * 获取文件服务实现
@@ -96,8 +91,8 @@ public class FileService {
             return ResponseDTO.wrap(FileResponseCodeConst.FILE_MODULE_ERROR);
         }
         // 获取文件服务
-        IFileService fileService = this.getFileService(typeEnum);//默认阿里云服务器
-        ResponseDTO<UploadVO> response = fileService.fileUpload(file, moduleTypeEnum.getPath());
+        //IFileService fileService = this.getFileService(typeEnum);//默认阿里云服务器
+        ResponseDTO<UploadVO> response = fileService.fileUpload(file, "file");
         return response;
     }
 
@@ -108,7 +103,7 @@ public class FileService {
      * @return
      */
     public ResponseDTO<String> getFileUrl(String path, FileServiceTypeEnum typeEnum) {
-        IFileService fileService = this.getFileService(typeEnum);
+        //IFileService fileService = this.getFileService(typeEnum);
         return fileService.getFileUrl(path);
     }
 
