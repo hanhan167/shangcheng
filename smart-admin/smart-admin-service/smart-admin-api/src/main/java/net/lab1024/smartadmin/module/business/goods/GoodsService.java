@@ -92,7 +92,7 @@ public class GoodsService {
         PageResultDTO<GoodsEntity> pageResultDTO = new PageResultDTO();
         goodsEntityList.forEach(val->{
             Integer id = val.getId();
-            List<FileEntity> fileEntityList = fileService.selectFile(ModelTypeEnum.GOODS.getName(), id);
+            List<FileEntity> fileEntityList = fileService.selectFile(ModelTypeEnum.GOODS.getValue(), id);
             val.setFileList(fileEntityList);
         });
         pageResultDTO.setList(goodsEntityList);
@@ -199,15 +199,15 @@ public class GoodsService {
         //类型
         List<StyleEntity> styleEntityList = styleGoodsService.selectStyleNameByGoodsId(goodsVO.getId());
         styleEntityList.forEach(val->{
-            List<FileEntity> styleFileEntityList = fileService.selectFile(ModelTypeEnum.STYLE.getName(), val.getId());
+            List<FileEntity> styleFileEntityList = fileService.selectFile(ModelTypeEnum.STYLE.getValue(), val.getId());
             val.setFileEntityList(styleFileEntityList);
         });
         goodsVO.setStyleEntityList(styleEntityList);
         //品牌
-        List<FileEntity> brandFileEntityList = fileService.selectFile(ModelTypeEnum.BRAND.getName(), goodsVO.getBrandId());
+        List<FileEntity> brandFileEntityList = fileService.selectFile(ModelTypeEnum.BRAND.getValue(), goodsVO.getBrandId());
         goodsVO.setBrandFileList(brandFileEntityList);
         //商品
-        List<FileEntity> goodsFileEntityList = fileService.selectFile(ModelTypeEnum.GOODS.getName(), goodsVO.getId());
+        List<FileEntity> goodsFileEntityList = fileService.selectFile(ModelTypeEnum.GOODS.getValue(), goodsVO.getId());
         goodsVO.setGoodsFileList(goodsFileEntityList);
 
         return ResponseDTO.succData(goodsVO);

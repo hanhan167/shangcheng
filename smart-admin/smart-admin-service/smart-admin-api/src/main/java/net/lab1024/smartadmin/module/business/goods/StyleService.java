@@ -68,7 +68,7 @@ public class StyleService {
         if(!CollectionUtils.isEmpty(styleEntityList)){
             styleEntityList.forEach(val->{
                 //匹配图片
-                List<FileEntity> fileList =  fileService.selectFile(ModelTypeEnum.STYLE.getName(),val.getId());
+                List<FileEntity> fileList =  fileService.selectFile(ModelTypeEnum.STYLE.getValue(),val.getId());
                 val.setFileEntityList(fileList);
             });
         }

@@ -77,7 +77,7 @@ public class BrandService {
         if(brandEntityList!=null && brandEntityList.size()>0){
             brandEntityList.forEach(val->{
                 //匹配图片
-                List<FileEntity> fileList =  fileService.selectFile(ModelTypeEnum.BRAND.getName(),val.getId());
+                List<FileEntity> fileList =  fileService.selectFile(ModelTypeEnum.BRAND.getValue(),val.getId());
                 val.setFileEntityList(fileList);
             });
         }
