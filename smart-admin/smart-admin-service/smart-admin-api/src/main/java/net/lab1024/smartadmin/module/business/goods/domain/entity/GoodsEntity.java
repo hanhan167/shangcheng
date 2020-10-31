@@ -38,8 +38,8 @@ public class GoodsEntity extends BaseQuery {
     @NotNull(message = "brandId不能为空")
     Integer brandId;
 
-    @NotEmpty(message = "titile不能为空")
-    String titile;
+    @NotEmpty(message = "title不能为空")
+    String title;
 
     @NotEmpty(message = "explain不能为空")
     String explain;

@@ -3,7 +3,7 @@
 <mapper namespace="net.lab1024.smartadmin.module.business.goods.dao.GoodsDao">
     <!-- 所有查询列 -->
     <sql id="QUERY_COLUMN_LIST">
-        id AS id, brand_id AS brandId,title as title, explain AS explain, price AS price, color AS color, norms AS norms,create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_time AS updateTime , deleted AS deleted
+        id AS id, brand_id AS brandId,title as title, `explain` AS `explain`, price AS price, color AS color, norms AS norms,create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_time AS updateTime , deleted AS deleted
     </sql>
 
     <!-- 查询列来源表 -->
@@ -16,8 +16,8 @@
         <where>
             <if test="null != id"><![CDATA[AND id = #{id}]]></if>
             <if test="null != brandId"><![CDATA[AND brand_id = #{brandId}]]></if>
-            <if test="null != title and '' != title"><![CDATA[AND title = #{titile}]]></if>
-            <if test="null != explain and '' != explain"><![CDATA[AND explain = #{explain}]]></if>
+            <if test="null != title and '' != title"><![CDATA[AND title = #{title}]]></if>
+            <if test="null != explain and '' != explain"><![CDATA[AND `explain` = #{explain}]]></if>
             <if test="null != price and '' != price"><![CDATA[AND price = #{price}]]></if>
             <if test="null != color and '' != color"><![CDATA[AND color = #{color}]]></if>
             <if test="null != norms and '' != norms"><![CDATA[AND norms = #{norms}]]></if>
@@ -31,23 +31,30 @@
 
     <!-- 全部条件(更多功能可以通过queryData扩展实现) -->
     <sql id="QUERY_WHERE_CLAUSE_SPECIAL">
-            <if test="null != titile and '' != titile"><![CDATA[AND title = #{titile}]]></if>
-            <if test="null != explain and '' != explain"><![CDATA[AND explain = #{explain}]]></if>
+            <if test="null != title and '' != title"><![CDATA[AND title = #{title}]]></if>
+            <if test="null != explain and '' != explain"><![CDATA[AND `explain` = #{explain}]]></if>
             <if test="null != color and '' != color"><![CDATA[AND color = #{color}]]></if>
             <if test="null != norms and '' != norms"><![CDATA[AND norms = #{norms}]]></if>
             <if test="null != createTime and '' != createTime"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="null != createUserId"><![CDATA[AND create_user_id = #{createUserId}]]></if>
             <if test="null != updateUserId"><![CDATA[AND update_user_id = #{updateUserId}]]></if>
-            <if test="null != updateTime and '' != updateTime"><![CDATA[AND tg.update_time = #{updateTime}]]></if>
+            <if test="null != updateTime and '' != updateTime"><![CDATA[AND update_time = #{updateTime}]]></if>
             <if test="null != deleted"><![CDATA[AND deleted = #{deleted}]]></if>
+            <if test="null != brandId"><![CDATA[AND tg.brand_id = #{brandId}]]></if>
+            <if test="null != typeList and 0 &lt;typeList.size">
+                <![CDATA[AND ts.id IN]]>
+                <foreach collection="typeList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="null != keywords and '' != keywords">
                 AND POSITION(TRIM(#{keywords}) IN CONCAT(IFNULL(tg.price,''),
                 IFNULL(tb.brand_name,''),
                 IFNULL(ts.style_name,''),
-                IFNULL(ts.titile,''),
-                IFNULL(ts.explain,''),
-                IFNULL(ts.color,''),
-                IFNULL(ts.norms,'')
+                IFNULL(tg.title,''),
+                IFNULL(tg.`explain`,''),
+                IFNULL(tg.color,''),
+                IFNULL(tg.norms,'')
                 ))
             </if>
             <if test="null != startPrice and null != endPrice">
@@ -67,8 +74,8 @@
     <sql id="UPDATE_COLUMN_SET">
         <set>
             <if test="null != brandId"><![CDATA[brand_id = #{brandId},]]></if>
-            <if test="null != titile"><![CDATA[titile = #{titile},]]></if>
-            <if test="null != explain"><![CDATA[explain = #{explain},]]></if>
+            <if test="null != title"><![CDATA[title = #{title},]]></if>
+            <if test="null != explain"><![CDATA[`explain` = #{explain},]]></if>
             <if test="null != price"><![CDATA[price = #{price},]]></if>
             <if test="null != color"><![CDATA[color = #{color},]]></if>
             <if test="null != norms"><![CDATA[norms = #{norms},]]></if>
@@ -89,7 +96,7 @@
 		id,
 		brand_id,
 		title,
-		explain,
+		`explain`,
 		price,
 		color,
 		norms,
@@ -103,7 +110,7 @@
 		(
 		#{id},
 		#{brandId},
-		#{titile},
+		#{title},
 		#{explain},
 		#{price},
 		#{color},
@@ -126,7 +133,7 @@
         id,
         brand_id,
         title,
-        explain,
+        `explain`,
         price,
         color,
         norms,
@@ -141,7 +148,7 @@
             (
             #{item.id},
             #{item.brandId},
-            #{item.titile},
+            #{item.title},
             #{item.explain},
             #{item.price},
             #{item.color},
@@ -240,6 +247,27 @@
     <delete id="deleteGoodsById" parameterType="integer">
         DELETE FROM t_goods WHERE id = #{id}
     </delete>
+
+    <select id="detailGoods" resultType="net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO">
+        SELECT
+	    tg.id as id,
+	    tg.brand_id as brandId,
+	    tb.brand_name as brandName,
+	    tg.title as title,
+	    tg.`explain` as `explain`,
+	    tg.price as price,
+	    tg.color as color,
+	    tg.norms as norms,
+	    tg.create_user_id as createUserId,
+	    tg.create_time as createTime,
+	    tg.update_user_id as updateUserId,
+	    tg.update_time as updateTime
+        FROM
+	    t_goods AS tg
+        LEFT JOIN t_brand AS tb ON tb.id = tg.brand_id
+        WHERE
+	    tg.id = #{id}
+    </select>
 
 
 </mapper>

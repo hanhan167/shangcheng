@@ -50,14 +50,12 @@ public class GoodsController {
 
     @ApiOperation(value = "分页查询全部商品消息", notes = "@author")
     @RequestMapping("goods/page/query")
-    @NoNeedLogin
     public ResponseDTO<PageResultDTO<GoodsEntity>> queryByPage(@RequestBody @Valid PageQueryDTO pageQueryDTO) {
         return goodsService.queryByPage(pageQueryDTO);
     }
 
     @ApiOperation(value = "新增商品", notes = "@author")
     @RequestMapping("goods/saveGoods")
-    @NoNeedLogin
     public ResponseDTO<GoodsEntity> saveGoods(@RequestBody @Valid GoodsEntity goodsEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return goodsService.saveOrUpdateGoods(goodsEntity,requestToken, DealTypeEnum.ADD.getValue());
@@ -65,7 +63,6 @@ public class GoodsController {
 
     @ApiOperation(value = "修改商品", notes = "@author")
     @RequestMapping("goods/updateGoods")
-    @NoNeedLogin
     public ResponseDTO<GoodsEntity> updateGoods(@RequestBody @Valid GoodsEntity goodsEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(goodsEntity.getId()==null){
@@ -75,14 +72,23 @@ public class GoodsController {
     }
 
     @ApiOperation(value = "删除商品", notes = "@author")
-    @RequestMapping("goods/delGoods/{id}")
-    @NoNeedLogin
+    @GetMapping("goods/delGoods/{id}")
     public ResponseDTO<GoodsEntity> delGoods(@PathVariable Integer id) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         if(id==null){
             return ResponseDTO.wrap(GoodsResponseCodeConst.ID_NOT_NULL);
         }
         return goodsService.delGoods(id,requestToken);
+    }
+
+    @ApiOperation(value = "查询商品详情", notes = "@author")
+    @GetMapping("goods/detailGoods/{id}")
+    public ResponseDTO<GoodsVO> detailGoods(@PathVariable Integer id) {
+        RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
+        if(id==null){
+            return ResponseDTO.wrap(GoodsResponseCodeConst.ID_NOT_NULL);
+        }
+        return goodsService.detailGoods(id,requestToken);
     }
 
     @ApiOperation(value = "查询品牌", notes = "@author")

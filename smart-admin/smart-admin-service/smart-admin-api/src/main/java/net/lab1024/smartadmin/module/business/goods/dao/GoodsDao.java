@@ -2,6 +2,7 @@ package net.lab1024.smartadmin.module.business.goods.dao;
 
 
 import net.lab1024.smartadmin.common.base.BaseDao;
+import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.PageQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
 import org.apache.ibatis.annotations.Param;
@@ -32,4 +33,6 @@ public interface GoodsDao extends BaseDao<GoodsEntity, Integer> {
     Long selectGoodsListCount(Map pageQueryDTO);
 
     int deleteGoodsById(@Param("id") Integer id);
+
+    GoodsVO detailGoods(@Param("id") Integer id);
 }

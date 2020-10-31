@@ -8,6 +8,7 @@ import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.constant.DealTypeEnum;
 import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
+import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
 import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
 import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
@@ -89,6 +90,11 @@ public class GoodsService {
         List<GoodsEntity> goodsEntityList =  goodsDao.selectGoodsListPage(queryFields);
         Long count = goodsDao.selectGoodsListCount(queryFields);
         PageResultDTO<GoodsEntity> pageResultDTO = new PageResultDTO();
+        goodsEntityList.forEach(val->{
+            Integer id = val.getId();
+            List<FileEntity> fileEntityList = fileService.selectFile(ModelTypeEnum.GOODS.getName(), id);
+            val.setFileList(fileEntityList);
+        });
         pageResultDTO.setList(goodsEntityList);
         pageResultDTO.setTotal(count);
         pageResultDTO.setPageNum(Long.valueOf(pageQueryDTO.getPageNo()));
@@ -107,7 +113,7 @@ public class GoodsService {
             //保存多对多表
             List<Integer> stypeList = goodsEntity.getStypeList();
             for(Integer styleId:stypeList){
-                styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).deleted(StatusEnum.NORMAL.getValue()).build());
+                styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).createTime(new Date()).createUserId(Integer.valueOf(requestToken.getRequestUserId().toString())).build());
             }
             //新增文件
             fileService.saveFileList(goodsEntity.getFileList(),goodsEntity.getId());
@@ -138,7 +144,7 @@ public class GoodsService {
             //保存多对多表
             List<Integer> stypeList = newGoodsEntity.getStypeList();
             for(Integer styleId:stypeList){
-                styleGoodsService.save(StyleGoodsEntity.builder().goodsId(newGoodsEntity.getId()).styleId(styleId).deleted(StatusEnum.NORMAL.getValue()).build());
+                styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).createTime(new Date()).createUserId(Integer.valueOf(requestToken.getRequestUserId().toString())).build());
             }
             //新增文件表
             fileService.saveFileList(fileList,newGoodsEntity.getId());
@@ -173,26 +179,6 @@ public class GoodsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseDTO<GoodsEntity> updateGoods(GoodsEntity goodsEntity, RequestTokenBO requestToken) {
-//        goodsEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
-//        goodsEntity.setUpdateTime(new Date());
-//        goodsEntity.setDeleted(StatusEnum.NORMAL.getValue());
-//        goodsDao.updateByKey(goodsEntity);
-//        List<StyleGoodsEntity> styleGoodsEntityList = styleGoodsService.selectList(StyleGoodsEntity.builder().styleId(goodsEntity.getStypeId()).goodsId(goodsEntity.getId()).deleted(StatusEnum.NORMAL.getValue()).build());
-//        if(!CollectionUtils.isEmpty(styleGoodsEntityList)){
-//            styleGoodsEntityList.forEach(val->{
-//                val.setUpdateTime(new Date());
-//                val.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
-//                styleGoodsService.updateByKey(val);
-//            });
-//        }else{
-//            styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(goodsEntity.getStypeId()).deleted(StatusEnum.NORMAL.getValue()).build());
-//        }
-//        return ResponseDTO.succData(goodsEntity);
-        return null;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<GoodsEntity> delGoods(Integer id, RequestTokenBO requestToken) {
         GoodsEntity goodsEntity = goodsDao.selectByKey(id);
         if(goodsEntity==null){
@@ -203,5 +189,27 @@ public class GoodsService {
         goodsEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         goodsDao.updateByKey(goodsEntity);
         return ResponseDTO.succ();
+    }
+
+    public ResponseDTO<GoodsVO> detailGoods(Integer id, RequestTokenBO requestToken) {
+        GoodsVO goodsVO = goodsDao.detailGoods(id);
+        if(goodsVO==null){
+            return ResponseDTO.wrap(GoodsResponseCodeConst.NOT_EXISTS);
+        }
+        //类型
+        List<StyleEntity> styleEntityList = styleGoodsService.selectStyleNameByGoodsId(goodsVO.getId());
+        styleEntityList.forEach(val->{
+            List<FileEntity> styleFileEntityList = fileService.selectFile(ModelTypeEnum.STYLE.getName(), val.getId());
+            val.setFileEntityList(styleFileEntityList);
+        });
+        goodsVO.setStyleEntityList(styleEntityList);
+        //品牌
+        List<FileEntity> brandFileEntityList = fileService.selectFile(ModelTypeEnum.BRAND.getName(), goodsVO.getBrandId());
+        goodsVO.setBrandFileList(brandFileEntityList);
+        //商品
+        List<FileEntity> goodsFileEntityList = fileService.selectFile(ModelTypeEnum.GOODS.getName(), goodsVO.getId());
+        goodsVO.setGoodsFileList(goodsFileEntityList);
+
+        return ResponseDTO.succData(goodsVO);
     }
 }

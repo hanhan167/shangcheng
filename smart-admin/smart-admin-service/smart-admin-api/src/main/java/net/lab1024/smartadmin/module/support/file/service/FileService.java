@@ -3,11 +3,7 @@ package net.lab1024.smartadmin.module.support.file.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
 import net.lab1024.smartadmin.module.support.file.FileDao;
-import net.lab1024.smartadmin.module.support.file.constant.FileModuleTypeEnum;
-import net.lab1024.smartadmin.module.support.file.constant.FileResponseCodeConst;
-import net.lab1024.smartadmin.module.support.file.constant.FileServiceNameConst;
 import net.lab1024.smartadmin.module.support.file.constant.FileServiceTypeEnum;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileAddDTO;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileDTO;
@@ -24,15 +20,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -85,16 +78,13 @@ public class FileService {
      * @param file
      * @param typeEnum   文件服务类型枚举类
      * @param moduleType 文件夹类型
+     * @param requestToken
      * @return
      */
-    public ResponseDTO<UploadVO> fileUpload(MultipartFile file, FileServiceTypeEnum typeEnum, Integer moduleType) {
-        FileModuleTypeEnum moduleTypeEnum = SmartBaseEnumUtil.getEnumByValue(moduleType, FileModuleTypeEnum.class);
-        if (null == moduleTypeEnum) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_MODULE_ERROR);
-        }
+    public ResponseDTO<FileEntity> fileUpload(MultipartFile file, FileServiceTypeEnum typeEnum, String moduleType, RequestTokenBO requestToken) {
         // 获取文件服务
         //IFileService fileService = this.getFileService(typeEnum);//默认阿里云服务器
-        ResponseDTO<UploadVO> response = fileService.fileUpload(file, "file");
+        ResponseDTO<FileEntity> response = fileService.fileUpload(file, "file",moduleType,requestToken.getRequestUserId());
         return response;
     }
 
@@ -219,8 +209,8 @@ public class FileService {
     }
 
 
-    public List<FileEntity> selectFile(String value, Integer val){
-        List<FileEntity> fileEntityList =  fileDao.selectFile(value, val);
+    public List<FileEntity> selectFile(String moduleType, Integer moduleId){
+        List<FileEntity> fileEntityList =  fileDao.selectFile(moduleType, moduleId);
         return fileEntityList;
     }
 }

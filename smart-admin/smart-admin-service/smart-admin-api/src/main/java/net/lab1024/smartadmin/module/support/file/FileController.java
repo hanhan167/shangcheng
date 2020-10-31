@@ -7,6 +7,7 @@ import net.lab1024.smartadmin.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.module.support.file.constant.FileServiceTypeEnum;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileAddDTO;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileQueryDTO;
+import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.domain.vo.FileVO;
 import net.lab1024.smartadmin.module.support.file.domain.vo.UploadVO;
 import net.lab1024.smartadmin.module.support.file.service.FileService;
@@ -36,35 +37,37 @@ public class FileController {
     private FileService fileService;
 
     @ApiOperation(value = "文件本地上传", notes = "文件本地上传")
-    @PostMapping("/api/file/localUpload/{moduleType}")
-    @NoNeedLogin
-    public ResponseDTO<UploadVO> localUpload(MultipartFile file, @PathVariable Integer moduleType) throws Exception {
-        return fileService.fileUpload(file, FileServiceTypeEnum.LOCAL, moduleType);
+    @PostMapping("/file/localUpload/{moduleType}")
+    public ResponseDTO<FileEntity> localUpload(MultipartFile file, @PathVariable String moduleType) throws Exception {
+        RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
+        return fileService.fileUpload(file, FileServiceTypeEnum.LOCAL, moduleType,requestToken);
     }
 
     @ApiOperation(value = "获取本地文件URL", notes = "获取文件URL")
-    @PostMapping("/api/file/get")
+    @PostMapping("/file/get")
     public ResponseDTO<String> localGetFile(String path) {
         return fileService.getFileUrl(path, FileServiceTypeEnum.LOCAL);
     }
 
-    @ApiOperation(value = "文件阿里云上传", notes = "文件阿里云上传")
-    @PostMapping("/api/file/aliYunUpload/{moduleType}")
-    public ResponseDTO<UploadVO> aliYunUpload(MultipartFile file, @PathVariable Integer moduleType) throws Exception {
-        return fileService.fileUpload(file, FileServiceTypeEnum.ALI_OSS, moduleType);
-    }
+   /* @ApiOperation(value = "文件阿里云上传", notes = "文件阿里云上传")
+    @PostMapping("/file/aliYunUpload/{moduleType}")
+    public ResponseDTO<UploadVO> aliYunUpload(MultipartFile file, @PathVariable String moduleType) throws Exception {
+        RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
+        return fileService.fileUpload(file, FileServiceTypeEnum.ALI_OSS, moduleType, requestToken);
+    }*/
 
     @ApiOperation(value = "获取阿里云文件URL", notes = "获取阿里云文件URL")
-    @PostMapping("/api/file/aliYunGet")
+    @PostMapping("/file/aliYunGet")
     public ResponseDTO<String> aliYunGet(String path) {
         return fileService.getFileUrl(path, FileServiceTypeEnum.ALI_OSS);
     }
 
-    @ApiOperation(value = "文件七牛云上传", notes = "文件七牛云上传")
-    @PostMapping("/api/file/qiNiuUpload/{moduleType}")
-    public ResponseDTO<UploadVO> qiNiuUpload(MultipartFile file, @PathVariable Integer moduleType) throws Exception {
-        return fileService.fileUpload(file, FileServiceTypeEnum.QI_NIU_OSS, moduleType);
-    }
+   /* @ApiOperation(value = "文件七牛云上传", notes = "文件七牛云上传")
+    @PostMapping("/file/qiNiuUpload/{moduleType}")
+    public ResponseDTO<UploadVO> qiNiuUpload(MultipartFile file, @PathVariable String moduleType) throws Exception {
+        RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
+        return fileService.fileUpload(file, FileServiceTypeEnum.QI_NIU_OSS, moduleType, requestToken);
+    }*/
 
     @ApiOperation(value = "获取七牛云文件URL", notes = "获取七牛云URL")
     @PostMapping("/api/file/qiNiuGet")
@@ -73,20 +76,20 @@ public class FileController {
     }
 
     @ApiOperation(value = "系统文件查询")
-    @PostMapping("/api/file/query")
+    @PostMapping("/file/query")
     public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(@RequestBody FileQueryDTO queryDTO) {
         return fileService.queryListByPage(queryDTO);
     }
 
     @ApiOperation(value = "系统文件下载通用接口（流下载）")
-    @GetMapping("/api/file/downLoad")
+    @GetMapping("/file/downLoad")
     @NoNeedLogin
     public ResponseEntity<byte[]> downLoadById(Long id, HttpServletRequest request) {
         return fileService.downLoadById(id, request);
     }
 
     @ApiOperation(value = "系统文件保存通用接口")
-    @PostMapping("/api/file/save")
+    @PostMapping("/file/save")
     public ResponseDTO<String> saveFile(@Valid @RequestBody FileAddDTO addDTO) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return fileService.saveFile(addDTO,requestToken);

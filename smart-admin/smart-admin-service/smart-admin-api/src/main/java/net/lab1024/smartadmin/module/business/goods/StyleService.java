@@ -31,10 +31,6 @@ public class StyleService {
     @Autowired
     private FileService fileService;
 
-    public ResponseDTO<PageResultDTO<GoodsVO>> queryByPage(GoodsQueryDTO queryDTO) {
-            return  null;
-    }
-
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<StyleEntity> saveStyle(StyleEntity styleEntity, RequestTokenBO requestToken) {
         styleEntity.setCreateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));

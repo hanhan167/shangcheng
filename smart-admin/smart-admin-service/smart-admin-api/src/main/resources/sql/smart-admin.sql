@@ -215,13 +215,13 @@ INSERT INTO `t_employee` (`id`, `login_name`, `login_pwd`, `actual_name`, `nick_
 DROP TABLE IF EXISTS `t_file`;
 CREATE TABLE IF NOT EXISTS `t_file` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `module_id` varchar(50) NOT NULL COMMENT '相关业务id',
+  `module_id` varchar(50) DEFAULT NULL COMMENT '相关业务id',
   `module_type` varchar(50) NOT NULL COMMENT '相关业务类型',
   `file_name` varchar(255) DEFAULT NULL COMMENT '文件名称',
   `file_size` varchar(255) DEFAULT NULL COMMENT '文件大小',
   `file_type` varchar(50) DEFAULT NULL COMMENT '文件类型，程序中枚举控制，文件类型：如身份证正面，三证合一等等',
   `file_path` varchar(255) NOT NULL COMMENT '文件key，用于文件下载',
-  `file_location_type` int(10) NOT NULL COMMENT '文件位置类型',
+  `file_location_type` int(10) DEFAULT NULL COMMENT '文件位置类型',
   `creater_user` int(10) NOT NULL COMMENT '创建人，即上传人',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '上次更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

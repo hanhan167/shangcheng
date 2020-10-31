@@ -39,6 +39,4 @@ public class StyleGoodsEntity extends BaseQuery{
 
     Date updateTime;
 
-    Integer deleted;
-
 }

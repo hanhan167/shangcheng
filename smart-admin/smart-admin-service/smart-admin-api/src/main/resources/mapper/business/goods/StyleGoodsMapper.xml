@@ -3,7 +3,7 @@
 <mapper namespace="net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao">
     <!-- 所有查询列 -->
     <sql id="QUERY_COLUMN_LIST">
-        id AS id, goods_id AS goodsId, style_id AS styleId, create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_time AS updateTime , deleted AS deleted
+        id AS id, goods_id AS goodsId, style_id AS styleId, create_time AS createTime, create_user_id AS createUserId, update_user_id AS updateUserId, update_time AS updateTime
     </sql>
 
     <!-- 查询列来源表 -->
@@ -21,7 +21,6 @@
             <if test="null != createUserId"><![CDATA[AND create_user_id = #{createUserId}]]></if>
             <if test="null != updateUserId"><![CDATA[AND update_user_id = #{updateUserId}]]></if>
             <if test="null != updateTime and '' != updateTime"><![CDATA[AND update_time = #{updateTime}]]></if>
-            <if test="null != deleted"><![CDATA[AND deleted = #{deleted}]]></if>
         </where>
     </sql>
 
@@ -41,7 +40,6 @@
             <if test="null != createUserId"><![CDATA[create_user_id = #{createUserId},]]></if>
             <if test="null != updateUserId"><![CDATA[update_user_id = #{updateUserId},]]></if>
             <if test="null != updateTime"><![CDATA[update_time = #{updateTime},]]></if>
-            <if test="null != deleted"><![CDATA[deleted = #{deleted},]]></if>
         </set>
     </sql>
 
@@ -57,9 +55,8 @@
 		update_time,
 		create_time,
 		update_user_id,
-		create_user_id,
-		deleted
-		) 
+		create_user_id
+		)
 		VALUES
 		(
 		#{id},
@@ -68,8 +65,7 @@
 		#{updateTime},
 		#{createTime},
 		#{updateUserId},
-		#{createUserId},
-		#{deleted}
+		#{createUserId}
 		)
     </insert>
 
@@ -86,8 +82,7 @@
         update_time,
         create_time,
         update_user_id,
-        create_user_id,
-        deleted
+        create_user_id
         )
         VALUES
         <foreach collection="list" index="index" item="item" open="" separator="," close="">
@@ -98,8 +93,7 @@
         #{item.updateTime},
         #{item.createTime},
         #{item.updateUserId},
-        #{item.createUserId},
-        #{item.deleted}
+        #{item.createUserId}
         )
         </foreach>
     </insert>
@@ -152,5 +146,19 @@
         WHERE goods_id = #{goodsId}
     </delete>
 
+    <select id="selectStyleNameByGoodsId"
+            resultType="net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity">
+            SELECT
+	         ts.id as id ,
+	         ts.style_name as styleName,
+	         ts.create_user_id as createUserId,
+	         ts.create_time as createTime,
+	         ts.update_user_id as updateUserId,
+	         ts.update_time as updateTime
+            FROM
+	        t_goods_style as tgs
+            RIGHT JOIN t_style as ts ON ts.id = tgs.style_id
+            where tgs.goods_id = #{id}
+    </select>
 
 </mapper>

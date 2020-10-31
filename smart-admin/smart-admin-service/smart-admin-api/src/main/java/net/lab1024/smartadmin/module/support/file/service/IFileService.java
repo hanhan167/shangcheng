@@ -1,6 +1,7 @@
 package net.lab1024.smartadmin.module.support.file.service;
 
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.domain.vo.UploadVO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,9 +36,11 @@ public interface IFileService {
      *
      * @param multipartFile
      * @param path
+     * @param moduleType
+     * @param dealUserId
      * @return
      */
-    ResponseDTO<UploadVO> fileUpload(MultipartFile multipartFile, String path);
+    ResponseDTO<FileEntity> fileUpload(MultipartFile multipartFile, String path, String moduleType, Long dealUserId);
 
     /**
      * 获取文件url
@@ -149,4 +152,5 @@ public interface IFileService {
         }
         return null;
     }
+
 }

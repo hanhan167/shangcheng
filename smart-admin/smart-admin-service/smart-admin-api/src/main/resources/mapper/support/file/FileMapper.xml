@@ -101,7 +101,7 @@
 
 
     <select id="selectFile" resultType="net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity">
-        SELECT * FROM t_file WHERE module_type =#{modelType} AND module_id = #{id}
+        SELECT * FROM t_file WHERE module_type =#{modelType} AND module_id = #{id} ORDER BY file_index ASC
     </select>
 
 </mapper>

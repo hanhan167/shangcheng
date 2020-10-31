@@ -7,6 +7,8 @@ import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleGoodsEnti
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * [  ]
@@ -23,4 +25,6 @@ public interface StyleGoodsDao extends BaseDao<StyleGoodsEntity, Integer> {
 
 
     int deleteByGoodsId(@Param("goodsId") Integer goodsId);
+
+    List<StyleEntity> selectStyleNameByGoodsId(@Param("id") Integer id);
 }

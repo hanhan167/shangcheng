@@ -34,10 +34,6 @@ public class BrandService {
     @Autowired
     private FileService fileService;
 
-    public ResponseDTO<PageResultDTO<GoodsVO>> queryByPage(GoodsQueryDTO queryDTO) {
-            return  null;
-    }
-
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<BrandEntity> saveBrand(BrandEntity brandEntity, RequestTokenBO requestToken) {
         if(!checkBrandName(brandEntity.getBrandName(),DealTypeEnum.ADD.getValue(),brandEntity.getId())){

@@ -1,8 +1,10 @@
 package net.lab1024.smartadmin.module.support.file.service;
 
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.module.support.file.FileDao;
 import net.lab1024.smartadmin.module.support.file.constant.FileResponseCodeConst;
 import net.lab1024.smartadmin.module.support.file.constant.FileServiceNameConst;
+import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.domain.vo.UploadVO;
 import net.lab1024.smartadmin.module.system.systemconfig.SystemConfigDao;
 import net.lab1024.smartadmin.module.system.systemconfig.constant.SystemConfigEnum;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * [  ]
@@ -34,6 +37,9 @@ import java.io.IOException;
 public class FileServiceLocal implements IFileService {
 
     @Autowired
+    private FileDao fileDao;
+
+    @Autowired
     private SystemConfigDao systemConfigDao;
 
     @Value("${spring.servlet.multipart.max-file-size}")
@@ -48,7 +54,7 @@ public class FileServiceLocal implements IFileService {
     private static final Long DEFAULT_SIZE = 10 * 1024 * 1024L;
 
     @Override
-    public ResponseDTO<UploadVO> fileUpload(MultipartFile multipartFile, String path) {
+    public ResponseDTO<FileEntity> fileUpload(MultipartFile multipartFile, String path, String moduleType, Long dealUserId) {
         if (null == multipartFile) {
             return ResponseDTO.wrap(FileResponseCodeConst.FILE_EMPTY);
         }
@@ -93,7 +99,18 @@ public class FileServiceLocal implements IFileService {
             log.error("", e);
             return ResponseDTO.wrap(FileResponseCodeConst.UPLOAD_ERROR);
         }
-        return ResponseDTO.succData(localUploadVO);
+        //插入对应的文件表
+        FileEntity fileEntity = FileEntity.builder()
+                .moduleType(moduleType)
+                .fileName(localUploadVO.getFileName())
+                .fileSize(String.valueOf(localUploadVO.getFileSize()))
+                .filePath(localUploadVO.getUrl())
+                .createrUser(dealUserId)
+                .build();
+        fileEntity.setCreateTime(new Date());
+        fileDao.insert(fileEntity);
+
+        return ResponseDTO.succData(fileEntity);
     }
 
     @Override

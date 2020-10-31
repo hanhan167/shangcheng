@@ -1,6 +1,7 @@
 package net.lab1024.smartadmin.module.business.goods;
 
 import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
+import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleGoodsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +28,15 @@ public class StyleGoodsService {
     }
 
 
-
-
-
     public void updateByKey(StyleGoodsEntity val) {
         styleGoodsDao.updateByKey(val);
     }
 
     public int deleteByGoodsId(Integer id) {
         return styleGoodsDao.deleteByGoodsId(id);
+    }
+
+    public List<StyleEntity> selectStyleNameByGoodsId(Integer id) {
+        return styleGoodsDao.selectStyleNameByGoodsId(id);
     }
 }
