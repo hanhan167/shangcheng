@@ -8,6 +8,7 @@ import net.lab1024.smartadmin.common.anno.NoNeedLogin;
 import net.lab1024.smartadmin.common.anno.NoValidPrivilege;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.constant.DealTypeEnum;
 import net.lab1024.smartadmin.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
@@ -59,7 +60,7 @@ public class GoodsController {
     @NoNeedLogin
     public ResponseDTO<GoodsEntity> saveGoods(@RequestBody @Valid GoodsEntity goodsEntity) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
-        return goodsService.saveGoods(goodsEntity,requestToken);
+        return goodsService.saveOrUpdateGoods(goodsEntity,requestToken, DealTypeEnum.ADD.getValue());
     }
 
     @ApiOperation(value = "修改商品", notes = "@author")
@@ -70,7 +71,7 @@ public class GoodsController {
         if(goodsEntity.getId()==null){
             return ResponseDTO.wrap(GoodsResponseCodeConst.ID_NOT_NULL);
         }
-        return goodsService.updateGoods(goodsEntity,requestToken);
+        return goodsService.saveOrUpdateGoods(goodsEntity,requestToken, DealTypeEnum.UPDATE.getValue());
     }
 
     @ApiOperation(value = "删除商品", notes = "@author")

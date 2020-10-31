@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,7 +27,9 @@ public interface GoodsDao extends BaseDao<GoodsEntity, Integer> {
 
     List<GoodsEntity> selectByTypeId(@Param("id") Integer id);
 
-    List<GoodsEntity> selectGoodsListPage(PageQueryDTO pageQueryDTO);
+    List<GoodsEntity> selectGoodsListPage(Map pageQueryDTO);
 
-    Long selectGoodsListCount(PageQueryDTO pageQueryDTO);
+    Long selectGoodsListCount(Map pageQueryDTO);
+
+    int deleteGoodsById(@Param("id") Integer id);
 }

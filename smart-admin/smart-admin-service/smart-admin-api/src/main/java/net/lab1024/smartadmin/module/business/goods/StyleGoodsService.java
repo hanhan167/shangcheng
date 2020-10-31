@@ -27,7 +27,14 @@ public class StyleGoodsService {
     }
 
 
+
+
+
     public void updateByKey(StyleGoodsEntity val) {
         styleGoodsDao.updateByKey(val);
+    }
+
+    public int deleteByGoodsId(Integer id) {
+        return styleGoodsDao.deleteByGoodsId(id);
     }
 }

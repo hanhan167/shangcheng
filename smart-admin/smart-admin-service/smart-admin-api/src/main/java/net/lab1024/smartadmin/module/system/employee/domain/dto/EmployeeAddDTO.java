@@ -20,7 +20,7 @@ import java.util.List;
 public class EmployeeAddDTO {
 
     @ApiModelProperty("姓名")
-    @NotNull(message = "姓名不能为空")
+    //@NotNull(message = "姓名不能为空")
     private String actualName;
 
     @ApiModelProperty("登录名")
@@ -39,7 +39,7 @@ public class EmployeeAddDTO {
     private Integer isDisabled;
 
     @ApiModelProperty("手机号")
-    @NotNull(message = "手机号不能为空")
+    //@NotNull(message = "手机号不能为空")
     @Pattern(regexp = SmartVerificationUtil.PHONE_REGEXP, message = "手机号格式不正确")
     private String phone;
 
@@ -50,7 +50,7 @@ public class EmployeeAddDTO {
     private String birthday;
 
     @ApiModelProperty("密码")
-    @NotNull(message = "密码不能为空")
+    //@NotNull(message = "密码不能为空")
     @Length(min = 6, message = "密码最少为6位字符")
     private String loginPwd;
 

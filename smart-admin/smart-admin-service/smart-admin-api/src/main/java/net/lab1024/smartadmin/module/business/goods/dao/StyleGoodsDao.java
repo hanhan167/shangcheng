@@ -4,6 +4,7 @@ package net.lab1024.smartadmin.module.business.goods.dao;
 import net.lab1024.smartadmin.common.base.BaseDao;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleGoodsEntity;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 
@@ -21,4 +22,5 @@ import org.springframework.stereotype.Repository;
 public interface StyleGoodsDao extends BaseDao<StyleGoodsEntity, Integer> {
 
 
+    int deleteByGoodsId(@Param("goodsId") Integer goodsId);
 }

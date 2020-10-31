@@ -5,11 +5,14 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import net.lab1024.smartadmin.common.base.BaseQuery;
 import net.lab1024.smartadmin.common.domain.BaseEntity;
+import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * [  ]
@@ -60,6 +63,9 @@ public class GoodsEntity extends BaseQuery {
 
     Integer deleted;
 
-    @NotEmpty(message = "stypeId不能为空")
-    Integer stypeId;
+    @Size(min = 1,message = "stypeId不能为空")
+    List<Integer> stypeList;
+
+    List<FileEntity> fileList;
+
 }

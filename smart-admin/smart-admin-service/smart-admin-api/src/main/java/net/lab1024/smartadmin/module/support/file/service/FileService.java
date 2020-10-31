@@ -26,11 +26,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -95,6 +97,17 @@ public class FileService {
         ResponseDTO<UploadVO> response = fileService.fileUpload(file, "file");
         return response;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void saveFileList(List<FileEntity> fileEntities,Integer id){
+        if(fileEntities!=null && fileEntities.size()>0){
+            for(FileEntity fileEntity:fileEntities){
+                fileEntity.setModuleId(id.toString());
+                fileDao.updateById(fileEntity);
+            }
+        }
+    }
+
 
     /**
      * 根据文件绝对路径 获取文件URL

@@ -145,5 +145,12 @@
         <include refid="QUERY_WHERE_CLAUSE"/>
     </select>
 
+    <delete id="deleteByGoodsId" parameterType="integer">
+        DELETE
+        FROM
+        t_goods_style
+        WHERE goods_id = #{goodsId}
+    </delete>
+
 
 </mapper>

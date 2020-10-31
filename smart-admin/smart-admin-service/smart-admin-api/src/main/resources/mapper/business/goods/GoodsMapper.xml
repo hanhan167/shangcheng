@@ -16,7 +16,7 @@
         <where>
             <if test="null != id"><![CDATA[AND id = #{id}]]></if>
             <if test="null != brandId"><![CDATA[AND brand_id = #{brandId}]]></if>
-            <if test="null != titile and '' != titile"><![CDATA[AND titile = #{titile}]]></if>
+            <if test="null != title and '' != title"><![CDATA[AND title = #{titile}]]></if>
             <if test="null != explain and '' != explain"><![CDATA[AND explain = #{explain}]]></if>
             <if test="null != price and '' != price"><![CDATA[AND price = #{price}]]></if>
             <if test="null != color and '' != color"><![CDATA[AND color = #{color}]]></if>
@@ -31,23 +31,29 @@
 
     <!-- 全部条件(更多功能可以通过queryData扩展实现) -->
     <sql id="QUERY_WHERE_CLAUSE_SPECIAL">
-        <where>
-            <if test="null != id"><![CDATA[AND id = #{id}]]></if>
-            <if test="null != brandId"><![CDATA[AND brand_id = #{brandId}]]></if>
-            <if test="null != titile and '' != titile"><![CDATA[AND titile = #{titile}]]></if>
+            <if test="null != titile and '' != titile"><![CDATA[AND title = #{titile}]]></if>
             <if test="null != explain and '' != explain"><![CDATA[AND explain = #{explain}]]></if>
-            <if test="null != price and '' != price"><![CDATA[AND price = #{price}]]></if>
             <if test="null != color and '' != color"><![CDATA[AND color = #{color}]]></if>
             <if test="null != norms and '' != norms"><![CDATA[AND norms = #{norms}]]></if>
             <if test="null != createTime and '' != createTime"><![CDATA[AND create_time = #{createTime}]]></if>
             <if test="null != createUserId"><![CDATA[AND create_user_id = #{createUserId}]]></if>
             <if test="null != updateUserId"><![CDATA[AND update_user_id = #{updateUserId}]]></if>
-            <if test="null != updateTime and '' != updateTime"><![CDATA[AND update_time = #{updateTime}]]></if>
+            <if test="null != updateTime and '' != updateTime"><![CDATA[AND tg.update_time = #{updateTime}]]></if>
             <if test="null != deleted"><![CDATA[AND deleted = #{deleted}]]></if>
             <if test="null != keywords and '' != keywords">
-                AND POSITION(TRIM(#{keywords}) IN CONCAT(IFNULL(tg.price,''),IFNULL(tb.brand_name,''),IFNULL(ts.style_name,'')))
+                AND POSITION(TRIM(#{keywords}) IN CONCAT(IFNULL(tg.price,''),
+                IFNULL(tb.brand_name,''),
+                IFNULL(ts.style_name,''),
+                IFNULL(ts.titile,''),
+                IFNULL(ts.explain,''),
+                IFNULL(ts.color,''),
+                IFNULL(ts.norms,'')
+                ))
             </if>
-        </where>
+            <if test="null != startPrice and null != endPrice">
+                <![CDATA[AND price BETWEEN #{startPrice} AND #{endPrice}]]>
+            </if>
+             <if test="null != price"><![CDATA[AND price = #{price}]]></if>
     </sql>
 
     <!-- 排序与分页 -->
@@ -230,6 +236,10 @@
         tg.deleted = 1
         <include refid="QUERY_WHERE_CLAUSE_SPECIAL"/>
     </select>
+
+    <delete id="deleteGoodsById" parameterType="integer">
+        DELETE FROM t_goods WHERE id = #{id}
+    </delete>
 
 
 </mapper>
