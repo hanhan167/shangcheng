@@ -43,6 +43,13 @@ public class FileController {
         return fileService.fileUpload(file, FileServiceTypeEnum.LOCAL, moduleType,requestToken);
     }
 
+    @ApiOperation(value = "文件本地删除", notes = "文件本地删除")
+    @PostMapping("/file/deleteLocalFile/{fileId}")
+    public ResponseDTO<FileEntity> deleteLocalFile(@PathVariable Integer fileId) throws Exception {
+        RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
+        return fileService.deleteLocalFile(fileId,requestToken);
+    }
+
     @ApiOperation(value = "获取本地文件URL", notes = "获取文件URL")
     @PostMapping("/file/get")
     public ResponseDTO<String> localGetFile(String path) {

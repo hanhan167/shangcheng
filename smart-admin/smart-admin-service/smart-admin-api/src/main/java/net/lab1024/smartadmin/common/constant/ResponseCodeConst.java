@@ -56,6 +56,9 @@ public class ResponseCodeConst {
 
     public static ResponseCodeConst JSON_FORMAT_ERROR = new ResponseCodeConst(115, "JSON格式错误");
 
+    public static ResponseCodeConst DELETE_FILE_ERROR = new ResponseCodeConst(116, "删除文件失败");
+
+
     protected int code;
 
     protected String msg;

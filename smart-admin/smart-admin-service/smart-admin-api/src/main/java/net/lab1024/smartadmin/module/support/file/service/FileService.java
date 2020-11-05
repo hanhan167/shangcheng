@@ -1,6 +1,7 @@
 package net.lab1024.smartadmin.module.support.file.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sun.org.apache.regexp.internal.RE;
 import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -78,23 +80,23 @@ public class FileService {
      * 文件上传服务
      *
      * @param file
-     * @param typeEnum   文件服务类型枚举类
-     * @param moduleType 文件夹类型
+     * @param typeEnum     文件服务类型枚举类
+     * @param moduleType   文件夹类型
      * @param requestToken
      * @return
      */
     public ResponseDTO<FileEntity> fileUpload(MultipartFile file, FileServiceTypeEnum typeEnum, String moduleType, RequestTokenBO requestToken) {
         // 获取文件服务
         //IFileService fileService = this.getFileService(typeEnum);//默认阿里云服务器
-        ResponseDTO<FileEntity> response = fileService.fileUpload(file, "file",moduleType,requestToken.getRequestUserId());
+        ResponseDTO<FileEntity> response = fileService.fileUpload(file, "file", moduleType, requestToken.getRequestUserId());
         return response;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void saveFileList(List<FileEntity> fileEntities,Integer id){
-        if(fileEntities!=null && fileEntities.size()>0){
-            for(FileEntity fileEntity:fileEntities){
-                if(fileEntity.getFileIndex()==null || fileEntity.getFileIndex()==0){
+    public void saveFileList(List<FileEntity> fileEntities, Integer id) {
+        if (fileEntities != null && fileEntities.size() > 0) {
+            for (FileEntity fileEntity : fileEntities) {
+                if (fileEntity.getFileIndex() == null || fileEntity.getFileIndex() == 0) {
                     throw new BusinessException(ResponseCodeConst.ERROR_PARAM.getCode(), "fileIndex不能为空!");
                 }
                 fileEntity.setModuleId(id.toString());
@@ -193,19 +195,20 @@ public class FileService {
         }
 
         // 根据文件服务类 获取对应文件服务 查询 url
-        FileServiceTypeEnum serviceTypeEnum = SmartBaseEnumUtil.getEnumByValue(entity.getFileLocationType(), FileServiceTypeEnum.class);
-        IFileService fileService = this.getFileService(serviceTypeEnum);
+//        FileServiceTypeEnum serviceTypeEnum = SmartBaseEnumUtil.getEnumByValue(entity.getFileLocationType(), FileServiceTypeEnum.class);
+//        IFileService fileService = this.getFileService(serviceTypeEnum);
         ResponseEntity<byte[]> stream = fileService.fileDownload(entity.getFilePath(), entity.getFileName(), request);
         return stream;
     }
 
     /**
      * 系统文件保存通用接口
+     *
      * @param addDTO
      * @return
      */
     public ResponseDTO<String> saveFile(FileAddDTO addDTO, RequestTokenBO requestToken) {
-        FileEntity entity = SmartBeanUtil.copy(addDTO,FileEntity.class);
+        FileEntity entity = SmartBeanUtil.copy(addDTO, FileEntity.class);
         entity.setCreaterUser(requestToken.getRequestUserId());
         entity.setCreateTime(new Date());
         entity.setFileIndex(addDTO.getFileIndex());
@@ -214,8 +217,38 @@ public class FileService {
     }
 
 
-    public List<FileEntity> selectFile(String moduleType, Integer moduleId){
-        List<FileEntity> fileEntityList =  fileDao.selectFile(moduleType, moduleId);
+    public List<FileEntity> selectFile(String moduleType, Integer moduleId) {
+        List<FileEntity> fileEntityList = fileDao.selectFile(moduleType, moduleId);
         return fileEntityList;
     }
+
+    public ResponseDTO<FileEntity> deleteLocalFile(Integer fileId, RequestTokenBO requestToken) {
+        FileEntity fileEntity = fileDao.selectById(fileId);
+        if (fileEntity == null) {
+            throw new BusinessException(ResponseCodeConst.NOT_EXISTS.getCode(), "文件不存在!");
+        }
+        String filePath = fileEntity.getFilePath();
+        boolean deleteFileFlag = deleteFile(filePath);
+        if(deleteFileFlag){
+            fileDao.deleteById(fileId);
+            return ResponseDTO.succ();
+        }
+        return ResponseDTO.wrap(ResponseCodeConst.DELETE_FILE_ERROR);
+    }
+
+    /**
+     * 删除单个文件
+     * @param sPath 被删除文件的文件名
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    public boolean deleteFile(String sPath) {
+        File file = new File(sPath);
+        // 路径为文件且不为空则进行删除
+        if (file.isFile() && file.exists()) {
+            boolean delete = file.delete();
+            return delete ? true : false;
+        }
+        return false;
+    }
+
 }

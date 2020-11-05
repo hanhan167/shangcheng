@@ -134,9 +134,9 @@ public class FileServiceLocal implements IFileService {
     @Override
     public ResponseEntity<byte[]> fileDownload(String key, String fileName, HttpServletRequest request) {
 
-        String url = fileParentPath + key;
+        //String url = fileParentPath + key;
         // 创建文件
-        File file = new File(url);
+        File file = new File(key);
         return this.downloadMethod(file, request);
     }
 }
