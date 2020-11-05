@@ -1,7 +1,6 @@
 package net.lab1024.smartadmin.module.business.goods;
 
-import com.baomidou.mybatisplus.extension.api.R;
-import net.lab1024.smartadmin.common.constant.JudgeEnum;
+
 import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
@@ -10,8 +9,6 @@ import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
 import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
-import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
-import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.PageQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.TypeAndIdDTO;
@@ -21,18 +18,14 @@ import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleGoodsEnti
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.service.FileService;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
+import net.lab1024.smartadmin.util.BusinessException;
 import net.lab1024.smartadmin.util.SmartBeanUtil;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.compress.utils.Lists;
-import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +44,9 @@ public class GoodsService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private StyleService styleService;
 
     public static boolean checkPrice(String price){
         String regex = "(^[1-9]([0-9]+)?(\\.[0-9]{1,})?$)|(^[1-9]{1,}$)|(^[0-9]{1}$)|(^[0-9]\\.[0-9]{1,}?$)";
@@ -113,6 +109,10 @@ public class GoodsService {
             //保存多对多表
             List<Integer> stypeList = goodsEntity.getStypeList();
             for(Integer styleId:stypeList){
+                //检查是否有对应的数据
+                if(styleService.selectByKey(styleId)==null){
+                    throw new BusinessException(ResponseCodeConst.NOT_EXISTS.getCode(), "找不到对应风格数据!");
+                }
                 styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).createTime(new Date()).createUserId(Integer.valueOf(requestToken.getRequestUserId().toString())).build());
             }
             //新增文件
@@ -144,6 +144,10 @@ public class GoodsService {
             //保存多对多表
             List<Integer> stypeList = newGoodsEntity.getStypeList();
             for(Integer styleId:stypeList){
+                //检查是否有对应的数据
+                if(styleService.selectByKey(styleId)==null){
+                    throw new BusinessException(ResponseCodeConst.NOT_EXISTS.getCode(), "找不到对应风格数据!");
+                }
                 styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).createTime(new Date()).createUserId(Integer.valueOf(requestToken.getRequestUserId().toString())).build());
             }
             //新增文件表

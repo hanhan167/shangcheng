@@ -56,6 +56,12 @@ public class ResponseDTO<T> {
         this.success = responseDTO.isSuccess();
     }
 
+    public ResponseDTO(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+        this.success = false;
+    }
+
     public static <T> ResponseDTO<T> succ() {
         return new ResponseDTO(ResponseCodeConst.SUCCESS);
     }
@@ -83,6 +89,10 @@ public class ResponseDTO<T> {
 
     public static <T> ResponseDTO<T> wrap(ResponseCodeConst codeConst, String msg) {
         return new ResponseDTO<T>(codeConst, msg);
+    }
+
+    public static <T> ResponseDTO<T> wrap(Integer code, String msg) {
+        return new ResponseDTO<T>(code, msg);
     }
 
     public String getMsg() {

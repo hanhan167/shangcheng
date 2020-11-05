@@ -1,6 +1,7 @@
 package net.lab1024.smartadmin.module.support.file.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.module.support.file.FileDao;
@@ -12,6 +13,7 @@ import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.domain.vo.FileVO;
 import net.lab1024.smartadmin.module.support.file.domain.vo.UploadVO;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
+import net.lab1024.smartadmin.util.BusinessException;
 import net.lab1024.smartadmin.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.util.SmartBeanUtil;
 import net.lab1024.smartadmin.util.SmartPageUtil;
@@ -92,6 +94,9 @@ public class FileService {
     public void saveFileList(List<FileEntity> fileEntities,Integer id){
         if(fileEntities!=null && fileEntities.size()>0){
             for(FileEntity fileEntity:fileEntities){
+                if(fileEntity.getFileIndex()==null || fileEntity.getFileIndex()==0){
+                    throw new BusinessException(ResponseCodeConst.ERROR_PARAM.getCode(), "fileIndex不能为空!");
+                }
                 fileEntity.setModuleId(id.toString());
                 fileDao.updateById(fileEntity);
             }

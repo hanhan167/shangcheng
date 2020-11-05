@@ -14,8 +14,8 @@
         </Console>
 
         <!-- 错误日志 -->
-        <RollingFile name="Error" fileName="${LOG_HOME}/smart_error.log"
-                     filePattern="${LOG_HOME}/smart_error_%d{yyyy_MM_dd}-%i.log">
+        <RollingFile name="Error" fileName="${LOG_HOME}/error/smart_error.log"
+                     filePattern="${LOG_HOME}/error/smart_error_%d{yyyy_MM_dd}-%i.log">
             <PatternLayout pattern="${PATTERN}" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -26,8 +26,8 @@
         </RollingFile>
 
         <!-- 按日期每天生成log文件 -->
-        <RollingFile name="RollingFile" fileName="${LOG_HOME}/smart_application.log"
-                     filePattern="${LOG_HOME}/smart_application_%d{yyyy_MM_dd}-%i.log">
+        <RollingFile name="RollingFile" fileName="${LOG_HOME}/all/smart_all.log"
+                     filePattern="${LOG_HOME}/all/smart_all_%d{yyyy_MM_dd}-%i.log">
             <PatternLayout pattern="${PATTERN}" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>

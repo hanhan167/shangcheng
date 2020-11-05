@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.common.constant.JudgeEnum;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.common.heartbeat.StringUtil;
 import net.lab1024.smartadmin.constant.CommonConst;
 import net.lab1024.smartadmin.module.system.department.DepartmentDao;
 import net.lab1024.smartadmin.module.system.department.domain.entity.DepartmentEntity;
@@ -17,7 +16,6 @@ import net.lab1024.smartadmin.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
 import net.lab1024.smartadmin.module.system.position.PositionDao;
 import net.lab1024.smartadmin.module.system.position.PositionService;
-import net.lab1024.smartadmin.module.system.position.domain.dto.PositionRelationAddDTO;
 import net.lab1024.smartadmin.module.system.position.domain.dto.PositionRelationResultDTO;
 import net.lab1024.smartadmin.module.system.privilege.service.PrivilegeEmployeeService;
 import net.lab1024.smartadmin.module.system.role.roleemployee.RoleEmployeeDao;
@@ -27,13 +25,19 @@ import net.lab1024.smartadmin.util.SmartDigestUtil;
 import net.lab1024.smartadmin.util.SmartPageUtil;
 import net.lab1024.smartadmin.util.SmartVerificationUtil;
 import com.google.common.collect.Lists;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -378,5 +382,14 @@ public class EmployeeService {
     public ResponseDTO getPersonById(Integer employeeId) {
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         return ResponseDTO.succData(employeeEntity);
+    }
+
+    public static void main(String[] args) throws IOException {
+        // org.springframework.core.io 包
+        Resource resource = new ClassPathResource("redis.txt");
+        File file = resource.getFile();
+        // FileUtils 用的是 Apache common-io 包
+        String string = FileUtils.readFileToString(file, CharEncoding.UTF_8);
+        System.out.println(string);
     }
 }

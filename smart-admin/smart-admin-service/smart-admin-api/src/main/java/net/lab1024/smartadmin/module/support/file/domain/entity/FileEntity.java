@@ -1,7 +1,9 @@
 package net.lab1024.smartadmin.module.support.file.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import net.lab1024.smartadmin.common.domain.BaseEntity;
 import lombok.Data;
 
@@ -20,6 +22,8 @@ import lombok.Data;
 @Data
 @TableName(value = "t_file")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileEntity extends BaseEntity {
 
 

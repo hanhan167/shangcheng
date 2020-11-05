@@ -4,6 +4,7 @@ import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.common.exception.SmartBusinessException;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.util.CommonRuntimeException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -46,6 +47,12 @@ public class SmartGlobalExceptionHandler {
         if (e instanceof HttpRequestMethodNotSupportedException) {
             return ResponseDTO.wrap(ResponseCodeConst.REQUEST_METHOD_ERROR);
         }
+
+        // 自定义 请求方式错误
+        if (e instanceof CommonRuntimeException) {
+            return ResponseDTO.wrap(((CommonRuntimeException) e).getCode(),((CommonRuntimeException) e).getMsg());
+        }
+
 
         // 参数类型错误
         if (e instanceof TypeMismatchException) {

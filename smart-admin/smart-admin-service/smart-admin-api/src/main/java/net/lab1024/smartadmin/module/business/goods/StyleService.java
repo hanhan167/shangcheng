@@ -1,12 +1,9 @@
 package net.lab1024.smartadmin.module.business.goods;
 
-import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
 import net.lab1024.smartadmin.module.business.goods.dao.StyleDao;
-import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
-import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.service.FileService;
@@ -38,6 +35,10 @@ public class StyleService {
         styleEntity.setDeleted(StatusEnum.NORMAL.getValue());
         styleDao.save(styleEntity);
         return ResponseDTO.succData(styleEntity);
+    }
+
+    public StyleEntity selectByKey(Integer id){
+       return styleDao.selectByKey(id);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -75,3 +76,5 @@ public class StyleService {
         return ResponseDTO.succData(styleEntityList);
     }
 }
+
+

@@ -20,6 +20,7 @@ import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleEntity;
 import net.lab1024.smartadmin.module.business.notice.domain.dto.NoticeQueryDTO;
 import net.lab1024.smartadmin.module.business.notice.domain.dto.NoticeVO;
+import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.system.employee.constant.EmployeeResponseCodeConst;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
 import net.lab1024.smartadmin.util.SmartRequestTokenUtil;
@@ -168,4 +169,11 @@ public class GoodsController {
         return goodsService.findIsNotGoods(typeAndIdDTO,requestToken);
     }
 
+
+    public static void main(String[] args) {
+        BrandEntity brandEntity = null;
+        for (FileEntity fileEntity : brandEntity.getFileEntityList()) {
+            System.out.println(fileEntity);
+        }
+    }
 }
