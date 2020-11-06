@@ -13,11 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -132,11 +132,8 @@ public class FileServiceLocal implements IFileService {
     }
 
     @Override
-    public ResponseEntity<byte[]> fileDownload(String key, String fileName, HttpServletRequest request) {
-
-        //String url = fileParentPath + key;
-        // 创建文件
+    public void fileDownload(String key, String fileName, HttpServletRequest request, HttpServletResponse response) {
         File file = new File(key);
-        return this.downloadMethod(file, request);
+        this.downloadMethod(file, request,response);
     }
 }

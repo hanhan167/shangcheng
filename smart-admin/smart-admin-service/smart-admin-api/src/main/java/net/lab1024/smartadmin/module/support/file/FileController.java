@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -89,10 +90,10 @@ public class FileController {
     }
 
     @ApiOperation(value = "系统文件下载通用接口（流下载）")
-    @GetMapping("/file/downLoad")
+    @GetMapping("/file/downLoad/{id}")
     @NoNeedLogin
-    public ResponseEntity<byte[]> downLoadById(Long id, HttpServletRequest request) {
-        return fileService.downLoadById(id, request);
+    public void downLoadById(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) {
+         fileService.downLoadById(id, request,response);
     }
 
     @ApiOperation(value = "系统文件保存通用接口")

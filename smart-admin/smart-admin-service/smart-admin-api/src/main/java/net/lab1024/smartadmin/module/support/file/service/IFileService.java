@@ -1,8 +1,9 @@
 package net.lab1024.smartadmin.module.support.file.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
-import net.lab1024.smartadmin.module.support.file.domain.vo.UploadVO;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,8 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +29,14 @@ import java.util.UUID;
  * @since JDK1.8
  */
 public interface IFileService {
+
+     String HEADER_CONTENT_DISPOSITION = "Content-Disposition";
+     String HEADER_CONTENT_LENGTH = "Content-Length";
+     String CONTENT_TYPE = "application/octet-stream";
+    /**
+     * 默认缓冲数组字节大小.
+     */
+    int DEFAULT_BUFFER_SIZE = 1024;
 
     /**
      * 文件上传
@@ -56,9 +63,10 @@ public interface IFileService {
      * @param key
      * @param fileName
      * @param request
+     * @param response
      * @return
      */
-    ResponseEntity<byte[]> fileDownload(String key, String fileName, HttpServletRequest request);
+    void fileDownload(String key, String fileName, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 生成文件名字
@@ -115,10 +123,10 @@ public interface IFileService {
         return "";
     }
 
-    default ResponseEntity<byte[]> downloadMethod(File file, HttpServletRequest request) {
-        HttpHeaders heads = new HttpHeaders();
-        heads.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream; charset=utf-8");
+    default void downloadMethod(File file, HttpServletRequest request, HttpServletResponse response) {
         String fileName = file.getName();
+        ByteArrayInputStream bis = null;
+        BufferedOutputStream bos = null;
         try {
             if (request.getHeader("User-Agent").toLowerCase().indexOf("firefox") > 0) {
                 // firefox浏览器
@@ -139,18 +147,56 @@ public interface IFileService {
         } catch (UnsupportedEncodingException e) {
             // log.error("", e);
         }
-        heads.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
         try {
-            InputStream in = new FileInputStream(file);
-            // 输入流转换为字节流
-            byte[] buffer = FileCopyUtils.copyToByteArray(in);
-            ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(buffer, heads, HttpStatus.OK);
-            //file.delete();
-            return responseEntity;
+            byte[] byteArray = file2byte(file);
+            response.reset();
+            response.addHeader(HEADER_CONTENT_DISPOSITION, "attachment;filename=\"" + fileName + "\"");
+            response.addHeader(HEADER_CONTENT_LENGTH, String.valueOf(byteArray.length));
+            response.setContentType(CONTENT_TYPE);
+            bis = new ByteArrayInputStream(byteArray);
+            bos = new BufferedOutputStream(response.getOutputStream());  //file.delete();
+            int bytesRead;
+            byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+            while ((bytesRead = bis.read(buffer)) != -1) {
+                bos.write(buffer, 0, bytesRead);
+            }
+            // 将文件发送到客户端
+            bos.flush();
         } catch (Exception e) {
             // log.error("", e);
+        }finally {
+            IOUtils.closeQuietly(bis);
+            IOUtils.closeQuietly(bos);
         }
-        return null;
+    }
+
+
+    /**
+     * 文件转byte数组
+     * @param tradeFile
+     * @return
+     */
+    static byte[] file2byte(File tradeFile){
+        byte[] buffer = null;
+        try
+        {
+            FileInputStream fis = new FileInputStream(tradeFile);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024];
+            int n;
+            while ((n = fis.read(b)) != -1)
+            {
+                bos.write(b, 0, n);
+            }
+            fis.close();
+            bos.close();
+            buffer = bos.toByteArray();
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return buffer;
     }
 
 }

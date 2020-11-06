@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
@@ -188,7 +189,7 @@ public class FileService {
      * @param request
      * @return
      */
-    public ResponseEntity<byte[]> downLoadById(Long id, HttpServletRequest request) {
+    public void downLoadById(Long id, HttpServletRequest request, HttpServletResponse response) {
         FileEntity entity = fileDao.selectById(id);
         if (null == entity) {
             throw new RuntimeException("文件信息不存在");
@@ -197,8 +198,7 @@ public class FileService {
         // 根据文件服务类 获取对应文件服务 查询 url
 //        FileServiceTypeEnum serviceTypeEnum = SmartBaseEnumUtil.getEnumByValue(entity.getFileLocationType(), FileServiceTypeEnum.class);
 //        IFileService fileService = this.getFileService(serviceTypeEnum);
-        ResponseEntity<byte[]> stream = fileService.fileDownload(entity.getFilePath(), entity.getFileName(), request);
-        return stream;
+         fileService.fileDownload(entity.getFilePath(),entity.getFileName(),request,response);
     }
 
     /**
