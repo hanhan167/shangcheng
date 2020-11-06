@@ -137,25 +137,8 @@ public class SmartAuthenticationInterceptor extends HandlerInterceptorAdapter {
         response.setHeader("Access-Control-Allow-Methods","*");
         response.setHeader("Access-Control-Allow-Credentials","true");
         response.setHeader("Access-Control-Max-Age","3600");
-
-//        response.setHeader("Access-Control-Allow-Origin", accessControlAllowOrigin);
-//        response.setHeader("Access-Control-Allow-Credentials", "true");
-//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
-//        response.setHeader("Access-Control-Expose-Headers", "*");
-//        response.setHeader("Access-Control-Allow-Headers", "Authentication,Origin, X-Requested-With, Content-Type, " + "Accept, x-access-token");
-//        response.setHeader("Cache-Control", "no-cache");
-//        response.setHeader("Pragma", "no-cache");
-//        response.setHeader("Expires ", "-1");
     }
 
-    //    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("*")
-//                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-//                .maxAge(3600)
-//                .allowCredentials(true);
-//    }
 
     /**
      * 错误输出

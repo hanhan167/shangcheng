@@ -50,7 +50,7 @@ public class GoodsController {
     private BrandService brandService;
 
     @ApiOperation(value = "分页查询全部商品消息", notes = "@author")
-    @RequestMapping("goods/page/query")
+    @RequestMapping("goods/queryGoods")
     public ResponseDTO<PageResultDTO<GoodsEntity>> queryGoods(@RequestBody @Valid PageQueryDTO pageQueryDTO) {
         return goodsService.queryByPage(pageQueryDTO);
     }
