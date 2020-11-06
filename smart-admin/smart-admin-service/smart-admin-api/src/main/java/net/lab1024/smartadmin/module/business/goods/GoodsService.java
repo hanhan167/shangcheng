@@ -61,7 +61,7 @@ public class GoodsService {
         Map<String, Object> queryFields = pageQueryDTO.getQueryFields();
         boolean sortFields = queryFields.containsKey("sortFields");
         if(!sortFields){
-            queryFields.put("sortFields","create_time desc");
+            queryFields.put("sortFields","tg.create_time desc");
         }
         if(queryFields.containsKey("priceRange") && queryFields.get("priceRange")!=null){
             String priceRange = queryFields.get("priceRange").toString();
