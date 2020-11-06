@@ -194,7 +194,11 @@ public class EmployeeService {
 //        positionService.addPositionRelation(positionRelAddDTO);
 
         //是否设置默认角色 TODO
-
+        RoleEmployeeEntity roleEmployeeEntity = new RoleEmployeeEntity();
+        roleEmployeeEntity.setEmployeeId(entity.getId());
+        roleEmployeeEntity.setRoleId(2L);//默认设置为2 (只能读)
+        roleEmployeeEntity.setCreateTime(new Date());
+        roleEmployeeDao.insert(roleEmployeeEntity);
 
         return ResponseDTO.succ();
     }
