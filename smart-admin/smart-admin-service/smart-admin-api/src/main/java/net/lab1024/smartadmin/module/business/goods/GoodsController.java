@@ -51,7 +51,7 @@ public class GoodsController {
 
     @ApiOperation(value = "分页查询全部商品消息", notes = "@author")
     @RequestMapping("goods/page/query")
-    public ResponseDTO<PageResultDTO<GoodsEntity>> queryByPage(@RequestBody @Valid PageQueryDTO pageQueryDTO) {
+    public ResponseDTO<PageResultDTO<GoodsEntity>> queryGoods(@RequestBody @Valid PageQueryDTO pageQueryDTO) {
         return goodsService.queryByPage(pageQueryDTO);
     }
 
@@ -164,6 +164,7 @@ public class GoodsController {
 
     @ApiOperation(value = "查询是否有对应的商品", notes = "@author")
     @RequestMapping("goods/findIsNotGoods")
+    @NoNeedLogin
     public ResponseDTO<List<GoodsEntity>>  findIsNotGoods(@RequestBody @Valid TypeAndIdDTO typeAndIdDTO) {
         RequestTokenBO requestToken = SmartRequestTokenUtil.getRequestUser();
         return goodsService.findIsNotGoods(typeAndIdDTO,requestToken);
