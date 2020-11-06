@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import org.apache.commons.io.IOUtils;
+import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,8 @@ import java.util.UUID;
  * @since JDK1.8
  */
 public interface IFileService {
+
+     Logger logger = LoggerFactory.getLogger(IFileService.class);
 
      String HEADER_CONTENT_DISPOSITION = "Content-Disposition";
      String HEADER_CONTENT_LENGTH = "Content-Length";
@@ -163,7 +168,7 @@ public interface IFileService {
             // 将文件发送到客户端
             bos.flush();
         } catch (Exception e) {
-            // log.error("", e);
+            throw new RuntimeException("下载文件失败");
         }finally {
             IOUtils.closeQuietly(bis);
             IOUtils.closeQuietly(bos);
@@ -192,9 +197,9 @@ public interface IFileService {
             bos.close();
             buffer = bos.toByteArray();
         }catch (FileNotFoundException e){
-            e.printStackTrace();
+            logger.error("FileNotFoundException: {}"+  e.getMessage());
         }catch (IOException e){
-            e.printStackTrace();
+            logger.error("IOException: {}"+  e.getMessage());
         }
         return buffer;
     }

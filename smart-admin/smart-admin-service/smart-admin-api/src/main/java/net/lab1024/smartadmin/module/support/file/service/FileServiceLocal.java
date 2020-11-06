@@ -51,6 +51,9 @@ public class FileServiceLocal implements IFileService {
     @Value("${file-upload-service.urlParent}")
     private String urlParent;
 
+    @Value("${file.location}")
+    private String fileLocation;
+
     private static final Long DEFAULT_SIZE = 10 * 1024 * 1024L;
 
     @Override
@@ -133,7 +136,16 @@ public class FileServiceLocal implements IFileService {
 
     @Override
     public void fileDownload(String key, String fileName, HttpServletRequest request, HttpServletResponse response) {
-        File file = new File(key);
+        //截取
+        int index = key.indexOf("/");
+        String url;
+        if(index!=-1){
+            String subIndex = key.substring(index + 1);
+            url = fileLocation+subIndex;
+        }else{
+            url = key;
+        }
+        File file = new File(url);
         this.downloadMethod(file, request,response);
     }
 }
