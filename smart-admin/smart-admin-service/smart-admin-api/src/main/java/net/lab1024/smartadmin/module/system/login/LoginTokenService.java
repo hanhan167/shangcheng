@@ -34,9 +34,9 @@ import java.util.UUID;
 public class LoginTokenService {
 
     /**
-     * 过期时间20分钟
+     * 过期时间1天
      */
-    private static final int EXPIRE_SECONDS = 1 * 60 * 60 * 1/3;
+    private static final int EXPIRE_SECONDS = 1 * 60 * 60;
     /**
      * jwt加密字段
      */
