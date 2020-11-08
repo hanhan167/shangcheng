@@ -62,7 +62,7 @@ public class StyleService {
         }
 
         //查询是否有对应的商品信息
-        if(!goodsService.checkIsNotLiveGoods(id,null)){
+        if(!goodsService.checkIsNotLiveGoods(null,id)){
             return ResponseDTO.wrap(ResponseCodeConst.GOODS_NOT_DELETE);
         }
 

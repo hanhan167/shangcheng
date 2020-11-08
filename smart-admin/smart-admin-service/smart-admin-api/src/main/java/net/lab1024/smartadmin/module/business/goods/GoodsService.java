@@ -122,7 +122,9 @@ public class GoodsService {
                 styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).createTime(new Date()).createUserId(Integer.valueOf(requestToken.getRequestUserId().toString())).build());
             }
             //新增文件
-            fileService.saveFileList(goodsEntity.getFileList(),goodsEntity.getId());
+            List<FileEntity> fileEntityList = fileService.saveFileList(goodsEntity.getFileList(), goodsEntity.getId(),requestToken.getRequestUserId());
+            goodsEntity.setFileList(fileEntityList);
+            return ResponseDTO.succData(goodsEntity);
         }else {
             GoodsEntity newGoodsEntity = SmartBeanUtil.copy(goodsEntity,GoodsEntity.class);
             List<FileEntity> fileList = newGoodsEntity.getFileList();
@@ -151,9 +153,10 @@ public class GoodsService {
                 styleGoodsService.save(StyleGoodsEntity.builder().goodsId(goodsEntity.getId()).styleId(styleId).createTime(new Date()).createUserId(Integer.valueOf(requestToken.getRequestUserId().toString())).build());
             }
             //新增文件表
-            fileService.saveFileList(fileList,newGoodsEntity.getId());
+            List<FileEntity> fileEntityList = fileService.saveFileList(fileList, newGoodsEntity.getId(), requestToken.getRequestUserId());
+            newGoodsEntity.setFileList(fileEntityList);
+            return ResponseDTO.succData(newGoodsEntity);
         }
-        return ResponseDTO.succData(goodsEntity);
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -115,8 +115,8 @@ public class LoginService {
         loginDTO.setPrivilegeList(initEmployeePrivilege(employeeDTO.getId()));
 
         loginDTO.setXAccessToken(compactJws);
-        DepartmentEntity departmentEntity = departmentDao.selectById(employeeDTO.getDepartmentId());
-        loginDTO.setDepartmentName(departmentEntity.getName());
+//        DepartmentEntity departmentEntity = departmentDao.selectById(employeeDTO.getDepartmentId());
+//        loginDTO.setDepartmentName(departmentEntity.getName());
 
         //判断是否为超管
         Boolean isSuperman = privilegeEmployeeService.isSuperman(loginDTO.getId());

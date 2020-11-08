@@ -1,7 +1,6 @@
 package net.lab1024.smartadmin.module.support.file.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sun.org.apache.regexp.internal.RE;
 import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
@@ -12,7 +11,6 @@ import net.lab1024.smartadmin.module.support.file.domain.dto.FileDTO;
 import net.lab1024.smartadmin.module.support.file.domain.dto.FileQueryDTO;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.domain.vo.FileVO;
-import net.lab1024.smartadmin.module.support.file.domain.vo.UploadVO;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
 import net.lab1024.smartadmin.util.BusinessException;
 import net.lab1024.smartadmin.util.SmartBaseEnumUtil;
@@ -22,7 +20,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +29,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +57,9 @@ public class FileService {
 
     @Resource(name = "local")
     private IFileService fileService;
+
+    @Value("${file.location}")
+    private String fileLocation;
 
     /**
      * 获取文件服务实现
@@ -94,16 +96,22 @@ public class FileService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void saveFileList(List<FileEntity> fileEntities, Integer id) {
+    public List<FileEntity> saveFileList(List<FileEntity> fileEntities, Integer id, Long requestUserId) {
+        List<FileEntity> fileEntityList = new ArrayList<>();
         if (fileEntities != null && fileEntities.size() > 0) {
             for (FileEntity fileEntity : fileEntities) {
                 if (fileEntity.getFileIndex() == null || fileEntity.getFileIndex() == 0) {
                     throw new BusinessException(ResponseCodeConst.ERROR_PARAM.getCode(), "fileIndex不能为空!");
                 }
+                fileEntity.setId(null);
                 fileEntity.setModuleId(id.toString());
-                fileDao.updateById(fileEntity);
+                fileEntity.setCreateTime(new Date());
+                fileEntity.setCreaterUser(requestUserId);
+                fileDao.insert(fileEntity);
+                fileEntityList.add(fileEntity);
             }
         }
+        return fileEntityList;
     }
 
 
@@ -228,7 +236,15 @@ public class FileService {
             throw new BusinessException(ResponseCodeConst.NOT_EXISTS.getCode(), "文件不存在!");
         }
         String filePath = fileEntity.getFilePath();
-        boolean deleteFileFlag = deleteFile(filePath);
+        int index = filePath.indexOf("/");
+        String url;
+        if(index!=-1){
+            String subIndex = filePath.substring(index + 1);
+            url = fileLocation+subIndex;
+        }else{
+            url = filePath;
+        }
+        boolean deleteFileFlag = deleteFile(url);
         if(deleteFileFlag){
             fileDao.deleteById(fileId);
             return ResponseDTO.succ();
