@@ -73,8 +73,8 @@ public class GoodsService {
                 if(!checkPrice(s1) || !checkPrice(s2)) {
                     return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM_ANY,"传递参数异常！");
                 }
-                queryFields.put("startPrice",s1);
-                queryFields.put("endPrice",s2);
+                queryFields.put("startPrice",Integer.valueOf(s1));
+                queryFields.put("endPrice",Integer.valueOf(s2));
             }else{
                 if(!checkPrice(priceRange)) {
                     return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM_ANY,"传递参数异常！");
