@@ -55,6 +55,8 @@ public class EmployeeResponseCodeConst extends ResponseCodeConst {
 
     public static final EmployeeResponseCodeConst VERIFICATION_CODE_INVALID = new EmployeeResponseCodeConst(3011, "验证码无效");
 
+    public static final EmployeeResponseCodeConst NOT_DELETE = new EmployeeResponseCodeConst(3012, "该账户无法删除！");
+
     public EmployeeResponseCodeConst(int code, String msg) {
         super(code, msg);
     }

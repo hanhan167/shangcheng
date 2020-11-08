@@ -136,17 +136,11 @@ public class GoodsService {
             styleGoodsService.deleteByGoodsId(id);
             //文件表
             fileService.deleteFilesByModuleId(id.toString());
-            //商品表
-            deleteGoodsById(id);
-
-            //新增操作
-            newGoodsEntity.setId(null);
-            newGoodsEntity.setCreateUserId(goodsVal.getCreateUserId());
-            newGoodsEntity.setCreateTime(goodsVal.getCreateTime());
+            //更新商品表
             newGoodsEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
             newGoodsEntity.setUpdateTime(new Date());
             newGoodsEntity.setDeleted(StatusEnum.NORMAL.getValue());
-            goodsSave(newGoodsEntity);
+            goodsDao.updateByKey(newGoodsEntity);
             //保存多对多表
             List<Integer> stypeList = newGoodsEntity.getStypeList();
             for(Integer styleId:stypeList){

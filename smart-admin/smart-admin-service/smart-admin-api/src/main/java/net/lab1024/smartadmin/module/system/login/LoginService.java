@@ -100,6 +100,12 @@ public class LoginService {
         if (EmployeeStatusEnum.DISABLED.equalsValue(employeeDTO.getIsDisabled())) {
             return ResponseDTO.wrap(EmployeeResponseCodeConst.IS_DISABLED);
         }
+        //去除已删除的账号登陆控制
+        if (EmployeeStatusEnum.DISABLED.equalsValue(employeeDTO.getIsDelete())) {
+            return ResponseDTO.wrap(EmployeeResponseCodeConst.LOGIN_FAILED);
+        }
+
+
         //jwt token赋值
         String compactJws = loginTokenService.generateToken(employeeDTO);
 

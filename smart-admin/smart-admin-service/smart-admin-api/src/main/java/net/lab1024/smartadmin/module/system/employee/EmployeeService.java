@@ -314,6 +314,11 @@ public class EmployeeService {
         if (null == employeeEntity) {
             return ResponseDTO.wrap(EmployeeResponseCodeConst.EMP_NOT_EXISTS);
         }
+        //排除admin不能删除
+        if(employeeEntity.getDepartmentId()==6666L){
+            return ResponseDTO.wrap(EmployeeResponseCodeConst.NOT_DELETE);
+        }
+
         //假删
         employeeEntity.setIsDelete(JudgeEnum.YES.getValue().longValue());
         employeeDao.updateById(employeeEntity);
