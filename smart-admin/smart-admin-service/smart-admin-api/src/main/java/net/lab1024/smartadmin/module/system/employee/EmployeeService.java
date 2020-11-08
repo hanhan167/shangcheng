@@ -251,23 +251,23 @@ public class EmployeeService {
         if (null == employeeEntity) {
             return ResponseDTO.wrap(EmployeeResponseCodeConst.EMP_NOT_EXISTS);
         }
-        if (StringUtils.isNotBlank(updateDTO.getIdCard())) {
-            boolean checkResult = Pattern.matches(SmartVerificationUtil.ID_CARD, updateDTO.getIdCard());
-            if (!checkResult) {
-                return ResponseDTO.wrap(EmployeeResponseCodeConst.ID_CARD_ERROR);
-            }
-        }
-        if (StringUtils.isNotEmpty(updateDTO.getBirthday())) {
-            boolean checkResult = Pattern.matches(SmartVerificationUtil.DATE, updateDTO.getBirthday());
-            if (!checkResult) {
-                return ResponseDTO.wrap(EmployeeResponseCodeConst.BIRTHDAY_ERROR);
-            }
-        }
-        Long departmentId = updateDTO.getDepartmentId();
-        DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
-        if (departmentEntity == null) {
-            return ResponseDTO.wrap(EmployeeResponseCodeConst.DEPT_NOT_EXIST);
-        }
+//        if (StringUtils.isNotBlank(updateDTO.getIdCard())) {
+//            boolean checkResult = Pattern.matches(SmartVerificationUtil.ID_CARD, updateDTO.getIdCard());
+//            if (!checkResult) {
+//                return ResponseDTO.wrap(EmployeeResponseCodeConst.ID_CARD_ERROR);
+//            }
+//        }
+//        if (StringUtils.isNotEmpty(updateDTO.getBirthday())) {
+//            boolean checkResult = Pattern.matches(SmartVerificationUtil.DATE, updateDTO.getBirthday());
+//            if (!checkResult) {
+//                return ResponseDTO.wrap(EmployeeResponseCodeConst.BIRTHDAY_ERROR);
+//            }
+//        }
+//        Long departmentId = updateDTO.getDepartmentId();
+//        DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
+//        if (departmentEntity == null) {
+//            return ResponseDTO.wrap(EmployeeResponseCodeConst.DEPT_NOT_EXIST);
+//        }
         EmployeeDTO sameNameEmployee = employeeDao.getByLoginName(updateDTO.getLoginName(), EmployeeStatusEnum.NORMAL.getValue());
         if (null != sameNameEmployee && !sameNameEmployee.getId().equals(employeeId)) {
             return ResponseDTO.wrap(EmployeeResponseCodeConst.LOGIN_NAME_EXISTS);

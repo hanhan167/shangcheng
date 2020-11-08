@@ -28,11 +28,11 @@ public class EmployeeBaseDTO {
     private String nickName;
 
     @ApiModelProperty("部门id")
-    @NotNull(message = "部门id不能为空")
+    //@NotNull(message = "部门id不能为空")
     private Long departmentId;
 
     @ApiModelProperty("是否启用")
-    @NotNull(message = "是否被禁用不能为空")
+    //@NotNull(message = "是否被禁用不能为空")
     private Integer isDisabled;
 
     @ApiModelProperty("手机号")
