@@ -9,6 +9,7 @@ import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.GoodsResponseCodeConst;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
 import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
+import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.PageQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.TypeAndIdDTO;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -47,6 +49,10 @@ public class GoodsService {
 
     @Autowired
     private StyleService styleService;
+
+    @Autowired
+    private StyleGoodsDao styleGoodsDao;
+
 
     public static boolean checkPrice(String price){
         String regex = "(^[1-9]([0-9]+)?(\\.[0-9]{1,})?$)|(^[1-9]{1,}$)|(^[0-9]{1}$)|(^[0-9]\\.[0-9]{1,}?$)";
@@ -180,6 +186,37 @@ public class GoodsService {
             goodsEntities = goodsDao.selectByTypeId(id);
         }
         return ResponseDTO.succData(goodsEntities);
+    }
+
+    /**
+     * 查询是否有对应的商品数据
+     * @param brandId
+     * @param styleId
+     * @return
+     */
+    public boolean checkIsNotLiveGoods(Integer brandId, Integer styleId) {
+        List<GoodsEntity> goodsEntityList = null;
+        if(brandId!=null){
+            goodsEntityList = goodsDao.selectList(GoodsEntity.
+                    builder().
+                    brandId(brandId).
+                    deleted(StatusEnum.NORMAL.getValue()).
+                    build());
+        }else{
+            List<StyleGoodsEntity> styleGoodsEntityList = styleGoodsDao.selectList(StyleGoodsEntity.
+                    builder().
+                    styleId(styleId).
+                    build());
+            if(styleGoodsEntityList!=null && styleGoodsEntityList.size()>0){
+                List<Integer> goodsIdList = styleGoodsEntityList.stream().map(val -> val.getGoodsId()).collect(Collectors.toList());
+                //查询是否有对应的正常的商品信息
+                goodsEntityList =  goodsDao.selectNormalOrNotGoods(goodsIdList,StatusEnum.NORMAL.getValue());
+            }
+        }
+        if(goodsEntityList!=null && goodsEntityList.size()>0) {
+            return false;
+        }
+        return true;
     }
 
     @Transactional(rollbackFor = Exception.class)

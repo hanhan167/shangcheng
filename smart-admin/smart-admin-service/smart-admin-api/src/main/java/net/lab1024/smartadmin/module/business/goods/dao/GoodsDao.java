@@ -35,4 +35,6 @@ public interface GoodsDao extends BaseDao<GoodsEntity, Integer> {
     int deleteGoodsById(@Param("id") Integer id);
 
     GoodsVO detailGoods(@Param("id") Integer id);
+
+    List<GoodsEntity> selectNormalOrNotGoods(@Param("goodsIdList") List<Integer> goodsIdList,@Param("status") Integer status);
 }

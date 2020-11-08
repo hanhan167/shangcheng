@@ -7,9 +7,13 @@ import net.lab1024.smartadmin.constant.DealTypeEnum;
 import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
 import net.lab1024.smartadmin.module.business.goods.dao.BrandDao;
+import net.lab1024.smartadmin.module.business.goods.dao.GoodsDao;
+import net.lab1024.smartadmin.module.business.goods.dao.StyleGoodsDao;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsQueryDTO;
 import net.lab1024.smartadmin.module.business.goods.domain.dto.GoodsVO;
 import net.lab1024.smartadmin.module.business.goods.domain.entity.BrandEntity;
+import net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity;
+import net.lab1024.smartadmin.module.business.goods.domain.entity.StyleGoodsEntity;
 import net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.module.support.file.service.FileService;
 import net.lab1024.smartadmin.module.system.login.domain.RequestTokenBO;
@@ -33,6 +37,12 @@ public class BrandService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private GoodsDao goodsDao;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<BrandEntity> saveBrand(BrandEntity brandEntity, RequestTokenBO requestToken) {
@@ -64,12 +74,19 @@ public class BrandService {
         if(brandEntity==null){
          return ResponseDTO.wrap(IS_NULL);
         }
+
+        //查询是否有对应的商品信息
+        if(!goodsService.checkIsNotLiveGoods(id,null)){
+            return ResponseDTO.wrap(ResponseCodeConst.GOODS_NOT_DELETE);
+        }
+
         brandEntity.setDeleted(StatusEnum.DELETED.getValue());
         brandEntity.setUpdateTime(new Date());
         brandEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
         brandDao.updateByKey(brandEntity);
         return ResponseDTO.succ();
     }
+
 
     public ResponseDTO<List<BrandEntity>> queryBrand(BrandEntity brandEntity, RequestTokenBO requestToken) {
         brandEntity.setDeleted(StatusEnum.NORMAL.getValue());

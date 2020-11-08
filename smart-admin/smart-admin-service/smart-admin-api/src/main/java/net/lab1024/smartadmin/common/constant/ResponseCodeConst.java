@@ -58,6 +58,7 @@ public class ResponseCodeConst {
 
     public static ResponseCodeConst DELETE_FILE_ERROR = new ResponseCodeConst(116, "删除文件失败");
 
+    public static ResponseCodeConst GOODS_NOT_DELETE = new ResponseCodeConst(117, "存在对应商品,无法删除!");
 
     protected int code;
 

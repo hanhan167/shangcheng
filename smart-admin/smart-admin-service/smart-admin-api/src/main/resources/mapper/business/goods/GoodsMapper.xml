@@ -286,5 +286,18 @@
 	    tg.id = #{id}
     </select>
 
+    <select id="selectNormalOrNotGoods"
+            resultType="net.lab1024.smartadmin.module.business.goods.domain.entity.GoodsEntity">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[WHERE]]>
+        deleted #{status} AND
+        id IN
+        <foreach collection="goodsIdList" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
 
 </mapper>

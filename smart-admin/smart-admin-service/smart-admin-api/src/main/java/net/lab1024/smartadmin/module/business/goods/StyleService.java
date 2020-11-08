@@ -1,5 +1,6 @@
 package net.lab1024.smartadmin.module.business.goods;
 
+import net.lab1024.smartadmin.common.constant.ResponseCodeConst;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.constant.StatusEnum;
 import net.lab1024.smartadmin.module.business.goods.constant.ModelTypeEnum;
@@ -27,6 +28,9 @@ public class StyleService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<StyleEntity> saveStyle(StyleEntity styleEntity, RequestTokenBO requestToken) {
@@ -56,6 +60,12 @@ public class StyleService {
         if(styleEntity==null){
             return ResponseDTO.wrap(IS_NULL);
         }
+
+        //查询是否有对应的商品信息
+        if(!goodsService.checkIsNotLiveGoods(id,null)){
+            return ResponseDTO.wrap(ResponseCodeConst.GOODS_NOT_DELETE);
+        }
+
         styleEntity.setDeleted(StatusEnum.DELETED.getValue());
         styleEntity.setUpdateTime(new Date());
         styleEntity.setUpdateUserId(Integer.valueOf(requestToken.getRequestUserId().toString()));
